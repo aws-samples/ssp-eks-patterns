@@ -1,0 +1,1844 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../image-scanning/">
+      
+      
+        <link rel="next" href="../../batch/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.34">
+    
+    
+      
+        <title>SecurityHub - Amazon EKS Blueprints Patterns</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.35f28582.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#aws-security-hub-monitoring" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Amazon EKS Blueprints Patterns" class="md-header__button md-logo" aria-label="Amazon EKS Blueprints Patterns" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Amazon EKS Blueprints Patterns
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              SecurityHub
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/aws-samples/cdk-eks-blueprints-patterns" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    aws-samples/cdk-eks-blueprints-patterns
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Amazon EKS Blueprints Patterns" class="md-nav__button md-logo" aria-label="Amazon EKS Blueprints Patterns" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Amazon EKS Blueprints Patterns
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/aws-samples/cdk-eks-blueprints-patterns" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    aws-samples/cdk-eks-blueprints-patterns
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Patterns
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Patterns
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Generative AI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            Generative AI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generative-ai/showcase/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Prompt Showcase Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Observability Patterns
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Observability Patterns
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2_1" id="__nav_2_2_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    New Cluster
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            New Cluster
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observability/single-new-eks-native/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AWS Native Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observability/single-new-eks-graviton-opensource-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AWS Graviton Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observability/single-new-eks-opensource/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observability/single-new-eks-awsnative-fargate-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fargate Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observability/single-new-eks-mixed-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Mixed Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observability/multi-acc-new-eks-mixed-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multi-Cluster Multi-Region Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observability/single-new-eks-apiserver-opensource-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Apiserver Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observability/single-new-eks-gpu-opensource-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS GPU Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observability/single-new-eks-java-opensource-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Java Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observability/single-new-eks-nginx-opensource-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Nginx Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2_2" id="__nav_2_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Existing Cluster
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Existing Cluster
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observability/existing-eks-awsnative-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AWS Native Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observability/existing-eks-mixed-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Mixed Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observability/existing-eks-opensource-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observability/existing-eks-apiserver-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Apiserver Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observability/existing-eks-nginx-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Nginx Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../observability/multi-account-monitoring/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multi Account Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Security Patterns
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Security Patterns
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../eks-config-rules/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EKS Config Rules
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../encryption-at-rest/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Encryption At Rest
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guardduty/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GuardDuty
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../image-scanning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image Scanning
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    SecurityHub
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    SecurityHub
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objective" class="md-nav__link">
+    <span class="md-ellipsis">
+      Objective
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deploy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deploy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deploy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deploy-aws-security-hub" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deploy AWS Security Hub
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verify" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verify
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Verify">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#verify-that-aws-security-hub-is-enabled" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verify that AWS Security Hub is enabled
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#view-findings-in-aws-security-hub" class="md-nav__link">
+    <span class="md-ellipsis">
+      View findings in AWS Security Hub
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../batch/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AWS Batch Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../backstage/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Backstage Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../custom-networking-with-ipv4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Customer Network with IPV4 Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../instana/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Instana Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jupyterhub/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Jupyterhub Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../knoveyor.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Konveyor Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubeflow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kubeflow Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubeshark/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kubeshark Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pipeline-multi-env-gitops/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multi environment Pipeline GitOps pattern Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multi-cluster-conformitron/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multi cluster conformitron pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nginx/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nginx Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../secureingresscognito/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Secure Ingress and Authentication Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../graviton/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Graviton Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../windows/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Windows Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../gmaestro/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    gMaestro Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objective" class="md-nav__link">
+    <span class="md-ellipsis">
+      Objective
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deploy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deploy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deploy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deploy-aws-security-hub" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deploy AWS Security Hub
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verify" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verify
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Verify">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#verify-that-aws-security-hub-is-enabled" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verify that AWS Security Hub is enabled
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#view-findings-in-aws-security-hub" class="md-nav__link">
+    <span class="md-ellipsis">
+      View findings in AWS Security Hub
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="aws-security-hub-monitoring">AWS Security Hub Monitoring<a class="headerlink" href="#aws-security-hub-monitoring" title="Permanent link">¤</a></h1>
+<h2 id="objective">Objective<a class="headerlink" href="#objective" title="Permanent link">¤</a></h2>
+<p>The objective of this pattern is to demonstrate how to enable AWS Security Hub and default security standards in your AWS account, verify that it is enabled, and get findings from AWS Security Hub.</p>
+<p>The pattern will enable AWS Security Hub in the <code>CDK_DEFAULT_ACCOUNT</code> and <code>CDK_DEFAULT_REGION</code>.</p>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">¤</a></h2>
+<ol>
+<li>Follow the usage <a href="https://github.com/aws-samples/cdk-eks-blueprints-patterns/blob/main/README.md#usage">instructions</a> to install the dependencies and perform the repository setup.</li>
+<li><code>argo-admin-password</code> secret must be defined in Secrets Manager in the same region as the EKS cluster.</li>
+<li>Complete the steps to <a href="../eks-config-rules/">enable AWS Config and deploy the Security Best Practices for Amazon EKS AWS Config managed rules</a>.</li>
+</ol>
+<p><strong>Optional (but recommended):</strong>  If you have not done so already, follow the steps to deploy the <a href="../guardduty/">Amazon GuardDuty stack and blueprint</a>. Since Amazon GuardDuty automatically sends its findings to AWS Security Hub, the sample EKS finding will appear in AWS Security Hub about five minutes after it has been enabled in the same region.</p>
+<h2 id="deploy">Deploy<a class="headerlink" href="#deploy" title="Permanent link">¤</a></h2>
+<p>To bootstrap the CDK toolkit and list all stacks in the app, run the following commands:</p>
+<div class="highlight"><pre><span></span><code>cdk<span class="w"> </span>bootstrap
+make<span class="w"> </span>list
+</code></pre></div>
+<h3 id="deploy-aws-security-hub">Deploy AWS Security Hub<a class="headerlink" href="#deploy-aws-security-hub" title="Permanent link">¤</a></h3>
+<p>To enable AWS Security Hub in the account and region deploy the stack, run the following command.</p>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>pattern<span class="w"> </span>securityhub<span class="w"> </span>deploy<span class="w"> </span>securityhub-setup
+</code></pre></div>
+<p>Once deployed, AWS Security Hub will automatically enable all controls that are part of the default security standards. Currently, the default security standards that are automatically enabled are <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/fsbp-standard.html">AWS Foundational Security Best Practices</a> and the <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/cis-aws-foundations-benchmark.html">Center for Internet Security (CIS) AWS Foundations Benchmark v1.2.0</a>.</p>
+<h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">¤</a></h2>
+<h3 id="verify-that-aws-security-hub-is-enabled">Verify that AWS Security Hub is enabled<a class="headerlink" href="#verify-that-aws-security-hub-is-enabled" title="Permanent link">¤</a></h3>
+<p>Now you can check that AWS Security Hub is successfully enabled by using the AWS CLI to query the same account and region.</p>
+<p>Using the AWS CLI run following command in the same account and region where you deployed the stack.</p>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>securityhub<span class="w"> </span>describe-hub
+</code></pre></div>
+<p>If you successfully enabled AWS Security Hub, you will see the following.</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;HubArn&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;arn:aws:securityhub:us-east-1:XXXXXXXXXXXX:hub/default&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;SubscribedAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2021-08-18T00:52:40.624Z&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;AutoEnableControls&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;ControlFindingGenerator&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SECURITY_CONTROL&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="view-findings-in-aws-security-hub">View findings in AWS Security Hub<a class="headerlink" href="#view-findings-in-aws-security-hub" title="Permanent link">¤</a></h3>
+<p>Use the following AWS CLI commands to view your findings in AWS Security Hub.</p>
+<p>To list critical findings and findings related to controls that have a failed status according to the enabled <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards.html">AWS Security Hub security standards</a> in the same account and region, run the following command:</p>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>securityhub<span class="w"> </span>get-findings<span class="w"> </span>--filter<span class="w"> </span><span class="s1">&#39;SeverityLabel={Value=CRITICAL,Comparison=EQUALS},ComplianceStatus={Value=FAILED,Comparison=EQUALS}&#39;</span>
+</code></pre></div>
+<p>Below is an example of an IAM finding that relates to a <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/iam-controls.html#iam-6">failed IAM control</a> that AWS Security Hub found related to the enabled <a href="https://docs.aws.amazon.com/securityhub/latest/userguide/standards-reference.html">security standards</a>, and will likely be present in your list of findings if you or your organization are not using a hardware MFA device for your AWS root account:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;Findings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;SchemaVersion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2018-10-08&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;Id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;arn:aws:securityhub:us-east-1:XXXXXXXXXXX:security-control/IAM.6/finding/494ffa38-0b6e-46d1-98f4-e605ec09d045&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;ProductArn&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;arn:aws:securityhub:us-east-1::product/aws/securityhub&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;ProductName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Security Hub&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;CompanyName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;AWS&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;Region&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;us-east-1&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;GeneratorId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security-control/IAM.6&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;AwsAccountId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;XXXXXXXXXXX&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;Types&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;Software and Configuration Checks/Industry and Regulatory Standards&quot;</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;FirstObservedAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2023-03-04T00:54:44.307Z&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;LastObservedAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2023-05-31T01:20:18.210Z&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;CreatedAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2023-03-04T00:54:44.307Z&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;UpdatedAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2023-05-31T01:20:05.845Z&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;Severity&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;Label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CRITICAL&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;Normalized&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">90</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;Original&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CRITICAL&quot;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="nt">&quot;Title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hardware MFA should be enabled for the root user&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;Description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;This AWS control checks whether your AWS account is enabled to use a hardware multi-factor authentication (MFA) device to sign in with root user credentials.&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;Remediation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;Recommendation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;Text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;For information on how to correct this issue, consult the AWS Security Hub controls documentation.&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;Url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://docs.aws.amazon.com/console/securityhub/IAM.6/remediation&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="nt">&quot;ProductFields&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;RelatedAWSResources:0/name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;securityhub-root-account-hardware-mfa-enabled-24e3b344&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;RelatedAWSResources:0/type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;AWS::Config::ConfigRule&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;aws/securityhub/ProductName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Security Hub&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;aws/securityhub/CompanyName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;AWS&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;Resources:0/Id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;arn:aws:iam::XXXXXXXXXXX:root&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;aws/securityhub/FindingId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;arn:aws:securityhub:us-east-1::product/aws/securityhub/arn:aws:securityhub:us-east-1:XXXXXXXXXXX:security-control/IAM.6/finding/494ffa38-0b6e-46d1-98f4-e605ec09d045&quot;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="nt">&quot;Resources&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;Type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;AwsAccount&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;Id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;AWS::::Account:XXXXXXXXXXX&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;Partition&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;aws&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;Region&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;us-east-1&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;Compliance&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;Status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FAILED&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;RelatedRequirements&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                    </span><span class="s2">&quot;CIS AWS Foundations Benchmark v1.2.0/1.14&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;CIS AWS Foundations Benchmark v1.4.0/1.6&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;NIST.800-53.r5 AC-2(1)&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;NIST.800-53.r5 AC-3(15)&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;NIST.800-53.r5 IA-2(1)&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;NIST.800-53.r5 IA-2(2)&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;NIST.800-53.r5 IA-2(6)&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;NIST.800-53.r5 IA-2(8)&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;PCI DSS v3.2.1/8.3.1&quot;</span>
+<span class="w">                </span><span class="p">],</span>
+<span class="w">                </span><span class="nt">&quot;SecurityControlId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;IAM.6&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;AssociatedStandards&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                    </span><span class="p">{</span>
+<span class="w">                        </span><span class="nt">&quot;StandardsId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ruleset/cis-aws-foundations-benchmark/v/1.2.0&quot;</span>
+<span class="w">                    </span><span class="p">},</span>
+<span class="w">                    </span><span class="p">{</span>
+<span class="w">                        </span><span class="nt">&quot;StandardsId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;standards/aws-foundational-security-best-practices/v/1.0.0&quot;</span>
+<span class="w">                    </span><span class="p">},</span>
+<span class="w">                    </span><span class="p">{</span>
+<span class="w">                        </span><span class="nt">&quot;StandardsId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;standards/cis-aws-foundations-benchmark/v/1.4.0&quot;</span>
+<span class="w">                    </span><span class="p">},</span>
+<span class="w">                    </span><span class="p">{</span>
+<span class="w">                        </span><span class="nt">&quot;StandardsId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;standards/nist-800-53/v/5.0.0&quot;</span>
+<span class="w">                    </span><span class="p">},</span>
+<span class="w">                    </span><span class="p">{</span>
+<span class="w">                        </span><span class="nt">&quot;StandardsId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;standards/pci-dss/v/3.2.1&quot;</span>
+<span class="w">                    </span><span class="p">}</span>
+<span class="w">                </span><span class="p">]</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="nt">&quot;WorkflowState&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;NEW&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;Workflow&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;Status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;NEW&quot;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="nt">&quot;RecordState&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ACTIVE&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;FindingProviderFields&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;Severity&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;Label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CRITICAL&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;Original&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CRITICAL&quot;</span>
+<span class="w">                </span><span class="p">},</span>
+<span class="w">                </span><span class="nt">&quot;Types&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                    </span><span class="s2">&quot;Software and Configuration Checks/Industry and Regulatory Standards&quot;</span>
+<span class="w">                </span><span class="p">]</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>To search for findings related to the Security Best Practices for Amazon EKS Config managed rules, run the following AWS CLI command:</p>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>securityhub<span class="w"> </span>get-findings<span class="w"> </span>--filters<span class="w"> </span><span class="s1">&#39;GeneratorId={Value=&quot;security-control/EKS.1&quot;, Comparison=&quot;EQUALS&quot;}&#39;</span>
+</code></pre></div>
+<p>You might see a finding such as the following:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;Findings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;SchemaVersion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2018-10-08&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;Id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;arn:aws:securityhub:us-east-1:XXXXXXXXXXX:security-control/EKS.1/finding/931a06d9-1b1d-431b-8b91-1ff86829b400&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;ProductArn&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;arn:aws:securityhub:us-east-1::product/aws/securityhub&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;ProductName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Security Hub&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;CompanyName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;AWS&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;Region&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;us-east-1&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;GeneratorId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;security-control/EKS.1&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;AwsAccountId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;XXXXXXXXXXX&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;Types&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;Software and Configuration Checks/Industry and Regulatory Standards&quot;</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;FirstObservedAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2023-05-09T10:34:36.736Z&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;LastObservedAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2023-05-30T10:27:41.205Z&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;CreatedAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2023-05-09T10:34:36.736Z&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;UpdatedAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2023-05-30T10:27:34.574Z&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;Severity&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;Label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;HIGH&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;Normalized&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">70</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;Original&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;HIGH&quot;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="nt">&quot;Title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;EKS cluster endpoints should not be publicly accessible&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;Description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;This control checks whether an Amazon EKS cluster endpoint is publicly accessible. The control fails if an EKS cluster has an endpoint that is publicly accessible.&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;Remediation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;Recommendation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;Text&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;For information on how to correct this issue, consult the AWS Security Hub controls documentation.&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;Url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://docs.aws.amazon.com/console/securityhub/EKS.1/remediation&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="nt">&quot;ProductFields&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;RelatedAWSResources:0/name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;securityhub-eks-endpoint-no-public-access-f5aecad6&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;RelatedAWSResources:0/type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;AWS::Config::ConfigRule&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;aws/securityhub/ProductName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Security Hub&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;aws/securityhub/CompanyName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;AWS&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;aws/securityhub/annotation&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Cluster Endpoint of starter-blueprint is Publicly accessible&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;Resources:0/Id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;arn:aws:eks:us-east-1:XXXXXXXXXXX:cluster/starter-blueprint&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;aws/securityhub/FindingId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;arn:aws:securityhub:us-east-1::product/aws/securityhub/arn:aws:securityhub:us-east-1:XXXXXXXXXXX:security-control/EKS.1/finding/931a06d9-1b1d-431b-8b91-1ff86829b400&quot;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="nt">&quot;Resources&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;Type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;AwsEksCluster&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;Id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;arn:aws:eks:us-east-1:XXXXXXXXXXX:cluster/starter-blueprint&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;Partition&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;aws&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;Region&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;us-east-1&quot;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;Compliance&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;Status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;FAILED&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;RelatedRequirements&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                    </span><span class="s2">&quot;NIST.800-53.r5 AC-21&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;NIST.800-53.r5 AC-3&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;NIST.800-53.r5 AC-3(7)&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;NIST.800-53.r5 AC-4&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;NIST.800-53.r5 AC-4(21)&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;NIST.800-53.r5 AC-6&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;NIST.800-53.r5 SC-7&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;NIST.800-53.r5 SC-7(11)&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;NIST.800-53.r5 SC-7(16)&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;NIST.800-53.r5 SC-7(20)&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;NIST.800-53.r5 SC-7(21)&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;NIST.800-53.r5 SC-7(3)&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;NIST.800-53.r5 SC-7(4)&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="s2">&quot;NIST.800-53.r5 SC-7(9)&quot;</span>
+<span class="w">                </span><span class="p">],</span>
+<span class="w">                </span><span class="nt">&quot;SecurityControlId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;EKS.1&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;AssociatedStandards&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                    </span><span class="p">{</span>
+<span class="w">                        </span><span class="nt">&quot;StandardsId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;standards/aws-foundational-security-best-practices/v/1.0.0&quot;</span>
+<span class="w">                    </span><span class="p">},</span>
+<span class="w">                    </span><span class="p">{</span>
+<span class="w">                        </span><span class="nt">&quot;StandardsId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;standards/nist-800-53/v/5.0.0&quot;</span>
+<span class="w">                    </span><span class="p">}</span>
+<span class="w">                </span><span class="p">]</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="nt">&quot;WorkflowState&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;NEW&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;Workflow&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;Status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;NEW&quot;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="nt">&quot;RecordState&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ACTIVE&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;FindingProviderFields&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;Severity&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;Label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;HIGH&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;Original&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;HIGH&quot;</span>
+<span class="w">                </span><span class="p">},</span>
+<span class="w">                </span><span class="nt">&quot;Types&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                    </span><span class="s2">&quot;Software and Configuration Checks/Industry and Regulatory Standards&quot;</span>
+<span class="w">                </span><span class="p">]</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>To see any findings generated by Amazon GuardDuty in AWS Security Hub, run the following command:</p>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>securityhub<span class="w"> </span>get-findings<span class="w"> </span>--filters<span class="w"> </span><span class="s1">&#39;ProductName={Value=&quot;GuardDuty&quot;,Comparison=&quot;EQUALS&quot;}&#39;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;Findings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;SchemaVersion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2018-10-08&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;Id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;arn:aws:guardduty:us-east-1:XXXXXXXXXXX:detector/68b6db88cfef1e59333ecbccd8e816b5/finding/0ec437473c147f649d1437f94d615224&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;ProductArn&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;arn:aws:securityhub:us-east-1::product/aws/guardduty&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;ProductName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;GuardDuty&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;CompanyName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Amazon&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;Region&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;us-east-1&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;GeneratorId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;arn:aws:guardduty:us-east-1:XXXXXXXXXXX:detector/68b6db88cfef1e59333ecbccd8e816b5&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;AwsAccountId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;XXXXXXXXXXX&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;Types&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="s2">&quot;TTPs/PrivilegeEscalation/PrivilegeEscalation:Kubernetes-PrivilegedContainer&quot;</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="err">...</span>
+<span class="w">            </span><span class="nt">&quot;Severity&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;Product&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;Label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MEDIUM&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="nt">&quot;Normalized&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="nt">&quot;Title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Privileged container with root level access launched on the EKS Cluster.&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;Description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;A privileged container with root level access was launched on EKS Cluster guardduty-blueprint. If this behavior is not expected, it may indicate that your credentials are compromised.&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;SourceUrl&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://us-east-1.console.aws.amazon.com/guardduty/home?region=us-east-1#/findings?macros=current&amp;fId=0ec437473c147f649d1437f94d615224&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;ProductFields&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="err">...</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="nt">&quot;Resources&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">}</span>
+<span class="w">            </span><span class="p">],</span>
+<span class="w">            </span><span class="nt">&quot;WorkflowState&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;NEW&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;Workflow&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;Status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;NEW&quot;</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="nt">&quot;RecordState&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ACTIVE&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;FindingProviderFields&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nt">&quot;Severity&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="nt">&quot;Label&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MEDIUM&quot;</span>
+<span class="w">                </span><span class="p">},</span>
+<span class="w">                </span><span class="nt">&quot;Types&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">                    </span><span class="s2">&quot;TTPs/PrivilegeEscalation/PrivilegeEscalation:Kubernetes-PrivilegedContainer&quot;</span>
+<span class="w">                </span><span class="p">]</span>
+<span class="w">            </span><span class="p">},</span>
+<span class="w">            </span><span class="nt">&quot;Sample&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>If you deployed the <a href="https://github.com/aws-samples/cdk-eks-blueprints-patterns/blob/main/docs/patterns/security/guardduty.md">Amazon GuardDuty Protection EKS Blueprints pattern</a> to the same account and region where you enabled AWS Security Hub, you should see Amazon GuardDuty findings like the one above. The sample workload deployed with the <a href="../guardduty/">Amazon GuardDuty pattern</a> which contains a privileged container is detected by Amazon GuardDuty and generates the <code>Kubernetes-PrivilegedContainer</code> finding. Amazon GuardDuty automatically sent this finding to AWS Security Hub where it can be viewed and triaged.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["tabs"], "search": "../../../assets/javascripts/workers/search.07f07601.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.56dfad97.min.js"></script>
+      
+    
+  </body>
+</html>

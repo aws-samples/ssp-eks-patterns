@@ -1,0 +1,1897 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+        <link rel="next" href="patterns/generative-ai/showcase/">
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.34">
+    
+    
+      
+        <title>Amazon EKS Blueprints Patterns</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.35f28582.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#eks-blueprints-patterns" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="Amazon EKS Blueprints Patterns" class="md-header__button md-logo" aria-label="Amazon EKS Blueprints Patterns" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Amazon EKS Blueprints Patterns
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Overview
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/aws-samples/cdk-eks-blueprints-patterns" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    aws-samples/cdk-eks-blueprints-patterns
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="Amazon EKS Blueprints Patterns" class="md-nav__button md-logo" aria-label="Amazon EKS Blueprints Patterns" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Amazon EKS Blueprints Patterns
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/aws-samples/cdk-eks-blueprints-patterns" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    aws-samples/cdk-eks-blueprints-patterns
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Patterns
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workstation-setup-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workstation Setup Options
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Workstation Setup Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#devcontainer-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      DevContainer Setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rhel-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      RHEL Setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ubuntu-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ubuntu Setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mac-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mac Setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verify-nodejs-and-npm-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verify Node.js and npm Installation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repo-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Repo setup
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Patterns
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Patterns
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Generative AI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            Generative AI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/generative-ai/showcase/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Prompt Showcase Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Observability Patterns
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Observability Patterns
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2_1" id="__nav_2_2_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    New Cluster
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            New Cluster
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/observability/single-new-eks-native/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AWS Native Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/observability/single-new-eks-graviton-opensource-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AWS Graviton Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/observability/single-new-eks-opensource/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/observability/single-new-eks-awsnative-fargate-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fargate Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/observability/single-new-eks-mixed-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Mixed Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/observability/multi-acc-new-eks-mixed-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multi-Cluster Multi-Region Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/observability/single-new-eks-apiserver-opensource-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Apiserver Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/observability/single-new-eks-gpu-opensource-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS GPU Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/observability/single-new-eks-java-opensource-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Java Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/observability/single-new-eks-nginx-opensource-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Nginx Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2_2" id="__nav_2_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Existing Cluster
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Existing Cluster
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/observability/existing-eks-awsnative-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AWS Native Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/observability/existing-eks-mixed-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Mixed Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/observability/existing-eks-opensource-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/observability/existing-eks-apiserver-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Apiserver Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/observability/existing-eks-nginx-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Nginx Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/observability/multi-account-monitoring/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multi Account Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Security Patterns
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Security Patterns
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/security/eks-config-rules/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EKS Config Rules
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/security/encryption-at-rest/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Encryption At Rest
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/security/guardduty/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GuardDuty
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/security/image-scanning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image Scanning
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/security/securityhub/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SecurityHub
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/batch/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AWS Batch Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/backstage/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Backstage Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/custom-networking-with-ipv4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Customer Network with IPV4 Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/instana/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Instana Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/jupyterhub/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Jupyterhub Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/knoveyor.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Konveyor Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/kubeflow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kubeflow Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/kubeshark/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kubeshark Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/pipeline-multi-env-gitops/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multi environment Pipeline GitOps pattern Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/multi-cluster-conformitron/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multi cluster conformitron pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/nginx/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nginx Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/secureingresscognito/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Secure Ingress and Authentication Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/graviton/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Graviton Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/windows/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Windows Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="patterns/gmaestro/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    gMaestro Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Patterns
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workstation-setup-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workstation Setup Options
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Workstation Setup Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#devcontainer-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      DevContainer Setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rhel-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      RHEL Setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ubuntu-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ubuntu Setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mac-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mac Setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verify-nodejs-and-npm-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verify Node.js and npm Installation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repo-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Repo setup
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="eks-blueprints-patterns">EKS Blueprints Patterns<a class="headerlink" href="#eks-blueprints-patterns" title="Permanent link">¤</a></h1>
+<p>Welcome to the <code>EKS Blueprints Patterns</code> repository.</p>
+<p>This repository contains a number of samples for how you can leverage the <a href="https://github.com/aws-quickstart/cdk-eks-blueprints">Amazon EKS Blueprints</a>. You can think of the patterns as "codified" reference architectures, which can be explained and executed as code in the customer environment.</p>
+<h2 id="patterns">Patterns<a class="headerlink" href="#patterns" title="Permanent link">¤</a></h2>
+<p>The individual patterns can be found in the <code>lib</code> directory. Most of the patterns are self-explanatory, for some more complex examples please use this guide and docs/patterns directory for more information.</p>
+<h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">¤</a></h2>
+<p>Please refer to the Amazon EKS Blueprints Patterns <a href="https://aws-samples.github.io/cdk-eks-blueprints-patterns/">documentation site</a> for complete list of Amazon EKS Blueprints patterns documentation.</p>
+<p>Please refer to the Amazon EKS Blueprints Quick Start <a href="https://aws-quickstart.github.io/cdk-eks-blueprints/">documentation site</a> for complete project documentation.</p>
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">¤</a></h2>
+<p>Before proceeding, make sure <a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html">AWS CLI</a> is installed on your machine.</p>
+<p>To use the eks-blueprints and patterns module, you must have <a href="https://nodejs.org/en/">Node.js</a> and <a href="https://docs.npmjs.com/downloading-and-installing-node-js-and-npm">npm</a> installed. You will also use <code>make</code> and <code>brew</code> to simplify build and other common actions.</p>
+<h2 id="workstation-setup-options">Workstation Setup Options<a class="headerlink" href="#workstation-setup-options" title="Permanent link">¤</a></h2>
+<h3 id="devcontainer-setup">DevContainer Setup<a class="headerlink" href="#devcontainer-setup" title="Permanent link">¤</a></h3>
+<p>Users can choose this option, if you dont want to run this solution on a mac or ubuntu machine. Please use the dev container configuration in the <code>.devcontainer</code> folder with <a href="devpod.sh">devpod</a> or any other dev container environment to create a development environment with dependencies such as Node, NPM, aws-cli, aws-cdk, kubectl, helm dependencies for your local development with <code>cdk-eks-blueprints-patterns</code> solution. </p>
+<h3 id="rhel-setup">RHEL Setup<a class="headerlink" href="#rhel-setup" title="Permanent link">¤</a></h3>
+<p>Follow the below steps to setup and leverage <code>eks-blueprints</code> and <code>eks-blueprints-patterns</code> in your Amazon Linux/CentOS/RHEL Linux machine.</p>
+<ol>
+<li>
+<p><strong>Update the package list</strong></p>
+<p>Update the package list to ensure you're installing the latest versions.</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>yum<span class="w"> </span>update
+</code></pre></div>
+</li>
+<li>
+<p><strong>Install <code>make</code></strong></p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>make
+</code></pre></div>
+</li>
+<li>
+<p><strong>Install <code>brew</code></strong> by following instructions as detailed in <a href="https://docs.brew.sh/Homebrew-on-Linux">docs.brew.sh</a></p>
+<div class="highlight"><pre><span></span><code><span class="w"> </span>/bin/bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span class="k">)</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p>Add Homebrew to your PATH</p>
+<div class="highlight"><pre><span></span><code><span class="nb">test</span><span class="w"> </span>-d<span class="w"> </span>~/.linuxbrew<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>~/.linuxbrew/bin/brew<span class="w"> </span>shellenv<span class="k">)</span><span class="s2">&quot;</span>
+<span class="nb">test</span><span class="w"> </span>-d<span class="w"> </span>/home/linuxbrew/.linuxbrew<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>/home/linuxbrew/.linuxbrew/bin/brew<span class="w"> </span>shellenv<span class="k">)</span><span class="s2">&quot;</span>
+<span class="nb">test</span><span class="w"> </span>-r<span class="w"> </span>~/.bash_profile<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;eval \&quot;\$(</span><span class="k">$(</span>brew<span class="w"> </span>--prefix<span class="k">)</span><span class="s2">/bin/brew shellenv)\&quot;&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bash_profile
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;eval \&quot;\$(</span><span class="k">$(</span>brew<span class="w"> </span>--prefix<span class="k">)</span><span class="s2">/bin/brew shellenv)\&quot;&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.profile
+</code></pre></div>
+<p>Verify brew installation</p>
+<div class="highlight"><pre><span></span><code>brew<span class="w"> </span>-v
+</code></pre></div>
+</li>
+<li>
+<p><strong>Install <code>Node.js</code> and <code>npm</code></strong></p>
+<div class="highlight"><pre><span></span><code>Install Node.js v18 and npm using brew.
+
+```bash
+brew install node@18
+```
+
+Note: Node.js package includes npm
+
+Set PATH for node@18
+
+```bash
+test -r ~/.bash_profile &amp;&amp; echo &#39;export PATH=&quot;/home/linuxbrew/.linuxbrew/opt/node@18/bin:$PATH&quot;&#39; &gt;&gt; ~/.bash_profile
+echo &#39;export PATH=&quot;/home/linuxbrew/.linuxbrew/opt/node@18/bin:$PATH&quot;&#39; &gt;&gt; ~/.profile
+export PATH=&quot;/home/linuxbrew/.linuxbrew/opt/node@18/bin:$PATH&quot;
+```
+</code></pre></div>
+<p>Post completing the above, continue from <a href="#verify-nodejs-and-npm-installationbash">Verify Node.js and npm Installation</a></p>
+</li>
+</ol>
+<h3 id="ubuntu-setup">Ubuntu Setup<a class="headerlink" href="#ubuntu-setup" title="Permanent link">¤</a></h3>
+<p>Follow the below steps to setup and leverage <code>eks-blueprints</code> and <code>eks-blueprints-patterns</code> in your Ubuntu Linux machine.</p>
+<ol>
+<li><strong>Update the package list</strong></li>
+</ol>
+<p>Update the package list to ensure you're installing the latest versions.</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>update
+</code></pre></div>
+<ol>
+<li><strong>Install <code>make</code></strong></li>
+</ol>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>make
+</code></pre></div>
+<ol>
+<li><strong>Install <code>brew</code></strong> by following instructions as detailed in <a href="https://docs.brew.sh/Homebrew-on-Linux">docs.brew.sh</a></li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="w"> </span>/bin/bash<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh<span class="k">)</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p>Add Homebrew to your PATH</p>
+<div class="highlight"><pre><span></span><code><span class="nb">test</span><span class="w"> </span>-d<span class="w"> </span>~/.linuxbrew<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>~/.linuxbrew/bin/brew<span class="w"> </span>shellenv<span class="k">)</span><span class="s2">&quot;</span>
+<span class="nb">test</span><span class="w"> </span>-d<span class="w"> </span>/home/linuxbrew/.linuxbrew<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>/home/linuxbrew/.linuxbrew/bin/brew<span class="w"> </span>shellenv<span class="k">)</span><span class="s2">&quot;</span>
+<span class="nb">test</span><span class="w"> </span>-r<span class="w"> </span>~/.bash_profile<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;eval \&quot;\$(</span><span class="k">$(</span>brew<span class="w"> </span>--prefix<span class="k">)</span><span class="s2">/bin/brew shellenv)\&quot;&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bash_profile
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;eval \&quot;\$(</span><span class="k">$(</span>brew<span class="w"> </span>--prefix<span class="k">)</span><span class="s2">/bin/brew shellenv)\&quot;&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.profile
+</code></pre></div>
+<p>Verify brew installation</p>
+<div class="highlight"><pre><span></span><code>brew<span class="w"> </span>-v
+</code></pre></div>
+<ol>
+<li><strong>Install <code>Node.js</code> and <code>npm</code></strong></li>
+</ol>
+<p>Install Node.js v18 and npm using brew.</p>
+<div class="highlight"><pre><span></span><code>brew<span class="w"> </span>install<span class="w"> </span>node@18
+</code></pre></div>
+<p>Note: Node.js package includes npm</p>
+<p>Set PATH for node@18</p>
+<div class="highlight"><pre><span></span><code><span class="nb">test</span><span class="w"> </span>-r<span class="w"> </span>~/.bash_profile<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;export PATH=&quot;/home/linuxbrew/.linuxbrew/opt/node@18/bin:$PATH&quot;&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bash_profile
+<span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;export PATH=&quot;/home/linuxbrew/.linuxbrew/opt/node@18/bin:$PATH&quot;&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.profile
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;/home/linuxbrew/.linuxbrew/opt/node@18/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p>Post completing the above, continue from <a href="#verify-nodejs-and-npm-installation">Verify Node.js and npm Installation</a></p>
+<h3 id="mac-setup">Mac Setup<a class="headerlink" href="#mac-setup" title="Permanent link">¤</a></h3>
+<p>Follow the below steps to setup and leverage <code>eks-blueprints</code> and <code>eks-blueprints-patterns</code> in your local Mac laptop.</p>
+<ol>
+<li><strong>Install <code>make</code>, <code>node</code> and <code>npm</code> using brew</strong></li>
+</ol>
+<div class="highlight"><pre><span></span><code>brew<span class="w"> </span>install<span class="w"> </span>make
+brew<span class="w"> </span>install<span class="w"> </span>node@18
+</code></pre></div>
+<p>Note: Node.js package includes npm</p>
+<p>Set PATH for node@18</p>
+<div class="highlight"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;export PATH=&quot;/opt/homebrew/opt/node@18/bin:$PATH&quot;&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.zshrc
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;/opt/homebrew/opt/node@18/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+</code></pre></div>
+<h3 id="verify-nodejs-and-npm-installation">Verify <code>Node.js</code> and <code>npm</code> Installation<a class="headerlink" href="#verify-nodejs-and-npm-installation" title="Permanent link">¤</a></h3>
+<ol>
+<li>Check the installed version of Node.js:</li>
+</ol>
+<div class="highlight"><pre><span></span><code>node<span class="w"> </span>-v
+</code></pre></div>
+<p>The output should be <code>v18.x.x</code>.</p>
+<ol>
+<li>Check the installed version of npm</li>
+</ol>
+<div class="highlight"><pre><span></span><code>npm<span class="w"> </span>-v
+</code></pre></div>
+<p>The output should be a version greater than <code>9.x.x</code>.</p>
+<p>If your npm version is not <code>9.x.x</code> or above, update npm with the following command:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>npm<span class="w"> </span>install<span class="w"> </span>-g<span class="w"> </span>npm@latest
+</code></pre></div>
+<p>Verify the installed version by running <code>npm -v</code>.</p>
+<h3 id="repo-setup">Repo setup<a class="headerlink" href="#repo-setup" title="Permanent link">¤</a></h3>
+<ol>
+<li>Clone <code>cdk-eks-blueprints-patterns</code> repository</li>
+</ol>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/aws-samples/cdk-eks-blueprints-patterns.git
+<span class="nb">cd</span><span class="w"> </span>cdk-eks-blueprints-patterns
+</code></pre></div>
+<p>PS: If you are contributing to this repo, please make sure to fork the repo, add your changes and create a PR against it.</p>
+<ol>
+<li>
+<p>Once you have cloned the repo, you can open it using your favourite IDE and run the below commands to install the dependencies and build the existing patterns.</p>
+</li>
+<li>
+<p>Install project dependencies.</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>deps
+</code></pre></div>
+<ul>
+<li>To view patterns that are available to be deployed, execute the following:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>npm<span class="w"> </span>i
+make<span class="w"> </span>build
+</code></pre></div>
+<ul>
+<li>To list the existing CDK EKS Blueprints patterns</li>
+</ul>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>list
+</code></pre></div>
+<p>Note: Some patterns have a hard dependency on AWS Secrets (for example GitHub access tokens). Initially you will see errors complaining about lack of the required secrets. It is normal. At the bottom, it will show the list of patterns which can be deployed, in case the pattern you are looking for is not available, it is due to the hard dependency which can be fixed by following the docs specific to those patterns.</p>
+<div class="highlight"><pre><span></span><code>To<span class="w"> </span>work<span class="w"> </span>with<span class="w"> </span>patterns<span class="w"> </span>use:
+<span class="w">        </span>$<span class="w"> </span>make<span class="w"> </span>pattern<span class="w"> </span>&lt;pattern-name&gt;<span class="w"> </span>&lt;list<span class="w"> </span><span class="p">|</span><span class="w"> </span>deploy<span class="w"> </span><span class="p">|</span><span class="w"> </span>synth<span class="w"> </span><span class="p">|</span><span class="w"> </span>destroy&gt;
+Example:
+<span class="w">        </span>$<span class="w"> </span>make<span class="w"> </span>pattern<span class="w"> </span>fargate<span class="w"> </span>deploy
+
+Patterns:
+
+<span class="w">        </span>bottlerocket
+<span class="w">        </span>data-at-rest
+<span class="w">        </span>datadog
+<span class="w">        </span>dynatrace-operator
+<span class="w">        </span>ecr-image-scanning
+<span class="w">        </span>emr
+<span class="w">        </span>fargate
+<span class="w">        </span>generative-ai-showcase
+<span class="w">        </span>generic-cluster-provider
+<span class="w">        </span>guardduty
+<span class="w">        </span>jupyterhub
+<span class="w">        </span>kasten
+<span class="w">        </span>keptn-control-plane
+<span class="w">        </span>konveyor
+<span class="w">        </span>kubecost
+<span class="w">        </span>kubeflow
+<span class="w">        </span>kubeshark
+<span class="w">        </span>multi-region
+<span class="w">        </span>multi-team
+<span class="w">        </span>newrelic
+<span class="w">        </span>nginx
+<span class="w">        </span>pipeline-multienv-gitops
+<span class="w">        </span>pipeline-multienv-monitoring
+<span class="w">        </span>pipeline
+<span class="w">        </span>rafay
+<span class="w">        </span>secure-ingress-cognito
+<span class="w">        </span>snyk
+<span class="w">        </span>starter
+<span class="w">        </span>gmaestro
+<span class="w">        </span>workloads-codecommit
+</code></pre></div>
+<ul>
+<li>Bootstrap your CDK environment.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>npx<span class="w"> </span>cdk<span class="w"> </span>bootstrap
+</code></pre></div>
+<ul>
+<li>You can then deploy a specific pattern with the following:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>pattern<span class="w"> </span>multi-team<span class="w"> </span>deploy
+</code></pre></div>
+<h1 id="developer-flow">Developer Flow<a class="headerlink" href="#developer-flow" title="Permanent link">¤</a></h1>
+<h2 id="modifications">Modifications<a class="headerlink" href="#modifications" title="Permanent link">¤</a></h2>
+<p>All files are compiled to the dist folder including <code>lib</code> and <code>bin</code> directories. For iterative development (e.g. if you make a change to any of the patterns) make sure to run compile:</p>
+<div class="highlight"><pre><span></span><code>make<span class="w"> </span>compile
+</code></pre></div>
+<p>The <code>compile</code> command is optimized to build only modified files and is fast.</p>
+<h2 id="new-patterns">New Patterns<a class="headerlink" href="#new-patterns" title="Permanent link">¤</a></h2>
+<p>To create a new pattern, please follow these steps:</p>
+<ol>
+<li>Under lib create a folder for your pattern, such as <code>&lt;pattern-name&gt;-construct</code>. If you plan to create a set of patterns that represent a particular subdomain, e.g. <code>security</code> or <code>hardening</code>, please create an issue to discuss it first. If approved, you will be able to create a folder with your subdomain name and group your pattern constructs under it.</li>
+<li>Blueprints generally don't require a specific class, however we use a convention of wrapping each pattern in a plain class like <code>&lt;Pattern-Name&gt;Construct</code>. This class is generally placed in <code>index.ts</code> under your pattern folder.</li>
+<li>Once the pattern implementation is ready, you need to include it in the list of the patterns by creating a file <code>bin/&lt;pattern-name&gt;.ts</code>. The implementation of this file is very light, and it is done to allow patterns to run independently.</li>
+</ol>
+<p>Example simple synchronous pattern:</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">configureApp</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;../lib/common/construct-utils&quot;</span><span class="p">;</span>
+<span class="k">import</span><span class="w"> </span><span class="nx">FargateConstruct</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;../lib/fargate-construct&quot;</span><span class="p">;</span>
+
+<span class="ow">new</span><span class="w"> </span><span class="nx">FargateConstruct</span><span class="p">(</span><span class="nx">configureApp</span><span class="p">(),</span><span class="w"> </span><span class="s2">&quot;fargate&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// configureApp() will create app and configure loggers and perform other prep steps</span>
+</code></pre></div>
+<ol>
+<li>In some cases, patterns need to use async APIs. For example, they may rely on external secrets that you want to validate ahead of the pattern deployment.</li>
+</ol>
+<p>Example async pattern:</p>
+<div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">configureApp</span><span class="p">,</span><span class="w"> </span><span class="nx">errorHandler</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s2">&quot;../lib/common/construct-utils&quot;</span><span class="p">;</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">configureApp</span><span class="p">();</span>
+
+<span class="ow">new</span><span class="w"> </span><span class="nx">NginxIngressConstruct</span><span class="p">().</span><span class="nx">buildAsync</span><span class="p">(</span><span class="nx">app</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;nginx&quot;</span><span class="p">).</span><span class="k">catch</span><span class="p">((</span><span class="nx">e</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">errorHandler</span><span class="p">(</span>
+<span class="w">    </span><span class="nx">app</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;NGINX Ingress pattern is not setup. This maybe due to missing secrets for ArgoCD admin pwd.&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">e</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<ol>
+<li>There are a few utility functions that can be used in the pattern implementation such as secret prevalidation. This function will fail if the corresponding secret is not defined, this preventing the pattern to deploy.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="k">await</span><span class="w"> </span><span class="nx">prevalidateSecrets</span><span class="p">(</span>
+<span class="w">  </span><span class="nx">NginxIngressConstruct</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
+<span class="w">  </span><span class="kc">undefined</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">SECRET_ARGO_ADMIN_PWD</span>
+<span class="p">);</span>
+<span class="k">await</span><span class="w"> </span><span class="nx">prevalidateSecrets</span><span class="p">(</span><span class="s2">&quot;my-pattern-name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;us-east-1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;my-secret-name&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">//</span>
+</code></pre></div>
+<h2 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">¤</a></h2>
+<p>See <a href="CONTRIBUTING.md">Contributing</a> guide for requirements on contribution.</p>
+<h1 id="deploying-blueprints-with-external-dependency-on-aws-resources">Deploying Blueprints with External Dependency on AWS Resources<a class="headerlink" href="#deploying-blueprints-with-external-dependency-on-aws-resources" title="Permanent link">¤</a></h1>
+<p>There are cases when the blueprints defined in the patterns have dependencies on existing AWS Resources such as Secrets defined in the account/region.
+For such cases, you may see errors if such resources are not defined.</p>
+<p>For <a href="./lib/pipeline-multi-env-gitops/index.ts"><code>PipelineMultiEnvGitops</code></a> please see instructions in this <a href="./docs/patterns/pipeline-multi-env-gitops.md">README</a>.</p>
+<p>For <code>MultiRegionConstruct</code> the pattern relies on the following secrets defined:</p>
+<ol>
+<li><code>github-ssh-key</code> - must contain GitHub SSH private key as a JSON structure containing fields <code>sshPrivateKey</code> and <code>url</code>. The secret is expected to be defined in <code>us-east-1</code> and replicated to <code>us-east-2</code> and <code>us-west-2</code> regions. For more information on SSH credentials setup see <a href="https://aws-quickstart.github.io/cdk-eks-blueprints/addons/argo-cd/#secrets-support">ArgoCD Secrets Support</a>.
+   Example Structure:</li>
+</ol>
+<div class="highlight"><pre><span></span><code>{
+    &quot;sshPrivateKey&quot;: &quot;-----BEGIN THIS IS NOT A REAL PRIVATE KEY-----\nb3BlbnNzaC1rtdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAACFwAAAAdzc2gtcn\nNhAAAAAwEAAQAAAgEAy82zTTDStK+s0dnaYzE7vLSAcwsiHM8gN\nhq2p5TfcjCcYUWetyu6e/xx5Rh+AwbVvDV5h9QyMw4NJobwuj5PBnhkc3QfwJAO5wOnl7R\nGbehIleWWZLs9qq`DufViQsa0fDwP6JCrqD14aIozg6sJ0Oqi7vQkV+jR0ht/\nuFO1ANXBn2ih0ZpXeHSbPDLeZQjlOBrbGytnCbdvLtfGEsV0WO2oIieWVXJj/zzpKuMmrr\nebPsfwr36nLprOQV6IhDDo\n-----END NOT A REAL PRIVATE KEY-----\n&quot;,
+
+    &quot;url&quot;: &quot;git@github&quot;
+}
+</code></pre></div>
+<p>Note: You can notice explicit \n characters in the sshPrivateKey.</p>
+<ol>
+<li><code>argo-admin-secret</code> - must contain ArgoCD admin password in Plain Text. The secret is expected to be defined in <code>us-east-1</code> and replicated to <code>us-east-1</code> and <code>us-west-2</code> regions.</li>
+</ol>
+<p>For <code>`Dynatrace One Agent</code></p>
+<ul>
+<li><code>dynatrace-tokens</code> - must contain <a href="https://github.com/dynatrace-oss/dynatrace-ssp-addon#aws-secret-manager-secrets">API_URL</a>, <a href="https://github.com/dynatrace-oss/dynatrace-eks-blueprints-addon#aws-secret-manager-secrets">API_TOKEN</a> and <a href="https://github.com/dynatrace-oss/dynatrace-eks-blueprints-addon#aws-secret-manager-secrets">PAAS_TOKEN</a> in Plain Text. The secret is expected to be defined in the target region (either directly or through AWS Secrets Manager Replication).</li>
+</ul>
+<p>For <code>keptn-control-plane</code> the pattern relies on the following secrets defined:</p>
+<ul>
+<li><code>keptn-secrets</code> - must contain API_TOKEN and BRIDGE_PASSWORD password in Plain Text. The secret is expected to be defined in <code>us-east-1</code> region.</li>
+</ul>
+<p>For <code>newrelic</code> the pattern relies on the following secrets defined:</p>
+<ul>
+<li><code>newrelic-pixie-keys</code> - must contain New Relic (required) and Pixie keys (optional). The secret is expected to be defined in the target region (either directly or through AWS Secrets Manager Replication).</li>
+</ul>
+<p>For more information on defining secrets for ArgoCD, please refer to <a href="https://aws-quickstart.github.io/cdk-eks-blueprints/addons/argo-cd/#secrets-support">Blueprints Documentation</a> as well as <a href="https://aws-quickstart.github.io/cdk-eks-blueprints/addons/argo-cd/#known-issues">known issues</a>.</p>
+<p>For <code>nginx</code> please see <a href="docs/patterns/nginx.md">NGINX Blueprint documentation</a>.</p>
+<p>For <code>datadog</code> the pattern relies on the following secret defined:</p>
+<ul>
+<li><code>apiKeyAWSSecret</code> - must contain the Datadog API key in Plain Text named <code>datadog-api-key</code>. The secret is expected to be defined in the target region.</li>
+</ul>
+<p>For <code>kubeflow</code> please see <a href="docs/patterns/kubeflow.md">Kubeflow documentation</a>.</p>
+<p>For <code>secure-ingress-cognito</code> please see <a href="docs/patterns/secureingresscognito.md">Secure Ingress using Cognito Blueprint documentation</a>.</p>
+<p>For <code>GmaestroConstruct</code> the pattern relies on the following secret defined:</p>
+<ul>
+<li><code>granulate-client-id</code> - must contain the client_id Plain Text. The secret is expected to be defined in the target region (either directly or through AWS Secrets Manager Replication).</li>
+</ul>
+<h2 id="security">Security<a class="headerlink" href="#security" title="Permanent link">¤</a></h2>
+<p>See <a href="CONTRIBUTING.md#security-issue-notifications">CONTRIBUTING</a> for more information.</p>
+<h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">¤</a></h2>
+<p>This library is licensed under the MIT-0 License. See the LICENSE file.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["tabs"], "search": "assets/javascripts/workers/search.07f07601.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.56dfad97.min.js"></script>
+      
+    
+  </body>
+</html>

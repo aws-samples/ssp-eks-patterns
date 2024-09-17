@@ -1,0 +1,2097 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../single-new-eks-mixed-observability/">
+      
+      
+        <link rel="next" href="../single-new-eks-apiserver-opensource-observability/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.34">
+    
+    
+      
+        <title>Multi-Cluster Multi-Region Monitoring - Amazon EKS Blueprints Patterns</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.35f28582.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#architecture" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Amazon EKS Blueprints Patterns" class="md-header__button md-logo" aria-label="Amazon EKS Blueprints Patterns" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Amazon EKS Blueprints Patterns
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Multi-Cluster Multi-Region Monitoring
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/aws-samples/cdk-eks-blueprints-patterns" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    aws-samples/cdk-eks-blueprints-patterns
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Amazon EKS Blueprints Patterns" class="md-nav__button md-logo" aria-label="Amazon EKS Blueprints Patterns" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Amazon EKS Blueprints Patterns
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/aws-samples/cdk-eks-blueprints-patterns" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    aws-samples/cdk-eks-blueprints-patterns
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Patterns
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Patterns
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Generative AI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            Generative AI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../generative-ai/showcase/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Prompt Showcase Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Observability Patterns
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Observability Patterns
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_2_1" id="__nav_2_2_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    New Cluster
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            New Cluster
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../single-new-eks-native/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AWS Native Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../single-new-eks-graviton-opensource-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AWS Graviton Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../single-new-eks-opensource/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../single-new-eks-awsnative-fargate-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fargate Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../single-new-eks-mixed-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Mixed Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Multi-Cluster Multi-Region Monitoring
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Multi-Cluster Multi-Region Monitoring
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#objective" class="md-nav__link">
+    <span class="md-ellipsis">
+      Objective
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Objective">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gitops-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      GitOps configuration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Prerequisites">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aws-accounts" class="md-nav__link">
+    <span class="md-ellipsis">
+      AWS Accounts
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clone-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clone Repository
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sso-profile-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      SSO Profile Setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#amazon-grafana-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Amazon Grafana Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#github-sources-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      GitHub Sources Configuration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployment
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#post-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Post Deployment
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Post Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#validating-grafana-dashboards" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validating Grafana Dashboards
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clean-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clean up
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../single-new-eks-apiserver-opensource-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Apiserver Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../single-new-eks-gpu-opensource-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS GPU Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../single-new-eks-java-opensource-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Java Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../single-new-eks-nginx-opensource-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Nginx Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2_2" id="__nav_2_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Existing Cluster
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Existing Cluster
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../existing-eks-awsnative-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AWS Native Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../existing-eks-mixed-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Mixed Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../existing-eks-opensource-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../existing-eks-apiserver-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Apiserver Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../existing-eks-nginx-observability/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OSS Nginx Monitoring
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-account-monitoring/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multi Account Observability Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Security Patterns
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Security Patterns
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/eks-config-rules/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EKS Config Rules
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/encryption-at-rest/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Encryption At Rest
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/guardduty/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GuardDuty
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/image-scanning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Image Scanning
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/securityhub/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SecurityHub
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../batch/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AWS Batch Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../backstage/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Backstage Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../custom-networking-with-ipv4/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Customer Network with IPV4 Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../instana/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Instana Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jupyterhub/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Jupyterhub Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../knoveyor.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Konveyor Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubeflow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kubeflow Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kubeshark/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kubeshark Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pipeline-multi-env-gitops/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multi environment Pipeline GitOps pattern Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../multi-cluster-conformitron/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multi cluster conformitron pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nginx/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Nginx Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../secureingresscognito/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Secure Ingress and Authentication Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../graviton/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Graviton Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../windows/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Windows Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../gmaestro/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    gMaestro Pattern
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#objective" class="md-nav__link">
+    <span class="md-ellipsis">
+      Objective
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Objective">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gitops-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      GitOps configuration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Prerequisites">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aws-accounts" class="md-nav__link">
+    <span class="md-ellipsis">
+      AWS Accounts
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clone-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clone Repository
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sso-profile-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      SSO Profile Setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#amazon-grafana-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Amazon Grafana Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#github-sources-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      GitHub Sources Configuration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployment
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#post-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Post Deployment
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Post Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#validating-grafana-dashboards" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validating Grafana Dashboards
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clean-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clean up
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>Multi-Cluster Multi-Region Monitoring</h1>
+
+<h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">¤</a></h2>
+<p>The following figure illustrates the architecture of the pattern we will be deploying for Multi-Account Multi-Region Mixed Observability (M3) Accelerator using both AWS native tooling such as: CloudWatch ContainerInsights, CloudWatch logs and Open source tooling such as AWS Distro for Open Telemetry (ADOT), Amazon Managed Service for Prometheus (AMP), Amazon Managed Grafana :</p>
+<p><img alt="Architecture" src="https://raw.githubusercontent.com/aws-observability/cdk-aws-observability-accelerator/main/docs/patterns/images/multi-acc-new-eks-mixed-observability-pattern-architecture-dark-v2.gif" /></p>
+<h2 id="objective">Objective<a class="headerlink" href="#objective" title="Permanent link">¤</a></h2>
+<ol>
+<li>Deploying two production grade Amazon EKS cluster with control plane logging across two AWS Accounts (Prod1, Prod2 account) in two different regions through a Continuous Deployment infrastructure pipeline triggered upon a commit to the repository that holds the pipeline configuration in another AWS account (pipeline account).</li>
+<li>Deploying ADOT add-on, AMP add-on to Prod 1 Amazon EKS Cluster to remote-write metrics to AMP workspace in Prod 1 AWS Account.</li>
+<li>Deploying ADOT add-on, CloudWatch add-on to Prod 2 Amazon EKS Cluster to write metrics to CloudWatch in Prod 2 AWS Account.</li>
+<li>Configuring GitOps tooling (Argo CD add-on) to support deployment of <a href="https://github.com/aws-observability/aws-o11y-recipes/tree/main/sandbox/ho11y">ho11y</a> and <a href="https://github.com/mreferre/yelb">yelb</a> sample applications, in a way that restricts each application to be deployed only into the team namespace, by using Argo CD projects.</li>
+<li>Setting up IAM roles in Prod 1 and Prod 2 Accounts to allow an AMG service role in the Monitoring account (mon-account) to access metrics from AMP workspace in Prod 1 account and CloudWatch namespace in Prod 2 account.</li>
+<li>Setting Amazon Managed Grafana to visualize AMP metrics from Amazon EKS cluster in Prod account 1 and CloudWatch metrics on workloads in Amazon EKS cluster in Prod account 2.</li>
+<li>Installing Grafana Operator in Monitoring account (mon-account) to add AWS data sources and create Grafana Dashboards to Amazon Managed Grafana.</li>
+<li>Installing External Secrets Operator in Monitoring account (mon-account) to retrieve and Sync the Grafana API keys.</li>
+</ol>
+<h3 id="gitops-configuration">GitOps configuration<a class="headerlink" href="#gitops-configuration" title="Permanent link">¤</a></h3>
+<ul>
+<li>For GitOps, this pattern bootstraps Argo CD add-on and points to <a href="https://github.com/aws-observability/aws-observability-accelerator/tree/main/artifacts/argocd-apps/sample-apps/envs">sample applications</a> in <a href="https://github.com/aws-observability/aws-observability-accelerator">AWS Observability Accelerator</a>.</li>
+<li>You can find the team-geordie configuration for this pattern in the workload repository under the folder <a href="https://github.com/aws-observability/aws-observability-accelerator/tree/main/artifacts/argocd-apps/teams/team-geordie"><code>team-geordie</code></a>.</li>
+<li>GitOps based management of Amazon Grafana resources (like: Datasources and Dashboards) is achieved using Argo CD application <a href="https://github.com/aws-observability/aws-observability-accelerator/tree/main/artifacts/argocd-apps/grafana-operator-app"><code>grafana-operator-app</code></a>. Grafana Operator resources are deployed using <a href="https://github.com/aws-observability/aws-observability-accelerator/tree/main/artifacts/argocd-apps/grafana-operator-chart"><code>grafana-operator-chart</code></a>.</li>
+</ul>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">¤</a></h2>
+<p>Ensure following tools are installed in host machine:</p>
+<ol>
+<li><a href="https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html">aws cli</a></li>
+<li><a href="https://Kubernetes.io/docs/tasks/tools/">kubectl</a></li>
+<li><a href="https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html#getting_started_install">cdk</a></li>
+<li><a href="https://docs.npmjs.com/cli/v8/commands/npm-install">npm</a></li>
+<li><a href="https://argo-cd.readthedocs.io/en/stable/cli_installation/">argocd</a></li>
+<li><a href="https://jqlang.github.io/jq/download/">jq</a></li>
+</ol>
+<h3 id="aws-accounts">AWS Accounts<a class="headerlink" href="#aws-accounts" title="Permanent link">¤</a></h3>
+<ol>
+<li>AWS Control Tower deployed in your AWS environment in the management account. If you have not already installed AWS Control Tower, follow the <a href="https://docs.aws.amazon.com/controltower/latest/userguide/getting-started-with-control-tower.html">Getting Started with AWS Control Tower documentation</a>, or you can enable AWS Organizations in the AWS Management Console account and enable AWS SSO.</li>
+<li>An AWS account under AWS Control Tower called Prod 1 Account(Workloads Account A aka <code>prodEnv1</code>) provisioned using the <a href="https://docs.aws.amazon.com/controltower/latest/userguide/provision-as-end-user.html">AWS Service Catalog Account Factory</a> product AWS Control Tower Account vending process or AWS Organization.</li>
+<li>An AWS account under AWS Control Tower called Prod 2 Account(Workloads Account B aka <code>prodEnv2</code>) provisioned using the <a href="https://docs.aws.amazon.com/controltower/latest/userguide/provision-as-end-user.html">AWS Service Catalog Account Factory</a>] product AWS Control Tower Account vending process or AWS Organization.</li>
+<li>An AWS account under AWS Control Tower called Pipeline Account (aka <code>pipelineEnv</code>) provisioned using the <a href="https://docs.aws.amazon.com/controltower/latest/userguide/provision-as-end-user.html">AWS Service Catalog Account Factory</a> product AWS Control Tower Account vending process or AWS Organization.</li>
+<li>An AWS account under AWS Control Tower called Monitoring Account (Grafana Account aka <code>monitoringEnv</code>) provisioned using the <a href="https://docs.aws.amazon.com/controltower/latest/userguide/provision-as-end-user.html">AWS Service Catalog Account Factory</a> product AWS Control Tower Account vending process or AWS Organization.</li>
+<li><a href="https://aws.amazon.com/blogs/mt/amazon-managed-grafana-getting-started/">An existing Amazon Managed Grafana Workspace</a> in <code>monitoringEnv</code> region of <code>monitoringEnv</code> account. Enable Data sources <strong>AWS X-Ray, Amazon Managed Service for Prometheus and Amazon Cloudwatch</strong>.</li>
+<li>If you are bringing new AWS accounts to deploy this pattern, then create a free-tier EC2 instance and let it run for 15-30 minutes in order to complete validation of account.</li>
+</ol>
+<hr />
+<blockquote>
+<p><strong><em>NOTE:</em></strong> This pattern consumes multiple Elastic IP addresses, because 3 VPCs with 3 subnets are created in <code>ProdEnv1</code>, <code>ProdEnv2</code> and <code>monitoringEnv</code> AWS accounts. Make sure your account limits for EIP are increased to support additional 3 EIPs per account.</p>
+</blockquote>
+<hr />
+<h3 id="clone-repository">Clone Repository<a class="headerlink" href="#clone-repository" title="Permanent link">¤</a></h3>
+<p>Clone <a href="https://github.com/aws-observability/cdk-aws-observability-accelerator"><code>cdk-aws-observability-accelerator</code></a> repository, if not done already.</p>
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/aws-observability/cdk-aws-observability-accelerator.git
+<span class="nb">cd</span><span class="w"> </span>cdk-aws-observability-accelerator
+</code></pre></div>
+<hr />
+<blockquote>
+<p><strong><em>Pro Tip:</em></strong> This document is compatible to run as Notebook with <a href="https://docs.runme.dev/install#runme-for-vs-code">RUNME for VS Code</a>. There's no need to manually copy and paste commands. You can effortlessly execute them directly from this markdown file. Feel free to give it a try.</p>
+<p>Here is a sample usage of this document using RUNME:</p>
+</blockquote>
+<p><img alt="runme-sample" src="https://raw.githubusercontent.com/aws-observability/cdk-aws-observability-accelerator/main/docs/patterns/images/multi-acc-new-eks-mixed-observability-pattern-runme-v2.gif" /></p>
+<hr />
+<h3 id="sso-profile-setup">SSO Profile Setup<a class="headerlink" href="#sso-profile-setup" title="Permanent link">¤</a></h3>
+<ol>
+<li>You will be accessing multiple accounts during deployment of this pattern. It is recommended to configure the AWS CLI to authenticate access with AWS IAM Identity Center (successor to AWS Single Sign-On). Let's configure Token provider with automatic authentication refresh for AWS IAM Identity Center. Ensure <a href="https://docs.aws.amazon.com/cli/latest/userguide/sso-configure-profile-token.html">Prerequisites mentioned here</a> are complete before proceeding to next steps.</li>
+<li>Create and use AWS IAM Identity Center login with <code>AWSAdministratorAccess</code> Permission set assigned to all AWS accounts required for this pattern (prodEnv1, prodEnv2, pipelineEnv and monitoringEnv).</li>
+<li>Configure <a href="https://docs.aws.amazon.com/cli/latest/userguide/sso-configure-profile-token.html#sso-configure-profile-token-auto-sso">AWS profile with sso</a> for <code>pipelineEnv</code> account:</li>
+</ol>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>configure<span class="w"> </span>sso<span class="w"> </span>--profile<span class="w"> </span>pipeline-account
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># sample configuration</span>
+<span class="c1"># SSO session name (Recommended): coa-multi-access-sso</span>
+<span class="c1"># SSO start URL [None]: https://d-XXXXXXXXXX.awsapps.com/start</span>
+<span class="c1"># SSO region [None]: us-west-2</span>
+<span class="c1"># SSO registration scopes [sso:account:access]:sso:account:access</span>
+
+<span class="c1"># Attempting to automatically open the SSO authorization page in your default browser.</span>
+<span class="c1"># If the browser does not open or you wish to use a different device to authorize this request, open the following URL:</span>
+
+<span class="c1"># https://device.sso.us-west-2.amazonaws.com/</span>
+
+<span class="c1"># Then enter the code:</span>
+
+<span class="c1"># XXXX-XXXX</span>
+<span class="c1"># There are 7 AWS accounts available to you.</span>
+<span class="c1"># Using the account ID 111122223333</span>
+<span class="c1"># There are 2 roles available to you.</span>
+<span class="c1"># Using the role name &quot;AWSAdministratorAccess&quot;</span>
+<span class="c1"># CLI default client Region [None]: us-west-2</span>
+<span class="c1"># CLI default output format [None]: json</span>
+
+<span class="c1"># To use this profile, specify the profile name using --profile, as shown:</span>
+
+<span class="c1"># aws s3 ls --profile pipeline-account</span>
+</code></pre></div>
+<ol>
+<li>Then, configure profile for <code>ProdEnv1</code> AWS account.</li>
+</ol>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>configure<span class="w"> </span>sso<span class="w"> </span>--profile<span class="w"> </span>prod1-account
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># sample configuration</span>
+<span class="c1"># SSO session name (Recommended): coa-multi-access-sso</span>
+<span class="c1"># There are 7 AWS accounts available to you.</span>
+<span class="c1"># Using the account ID 444455556666</span>
+<span class="c1"># There are 2 roles available to you.</span>
+<span class="c1"># Using the role name &quot;AWSAdministratorAccess&quot;</span>
+<span class="c1"># CLI default client Region [None]: us-west-2</span>
+<span class="c1"># CLI default output format [None]: json</span>
+
+<span class="c1"># To use this profile, specify the profile name using --profile, as shown:</span>
+
+<span class="c1"># aws s3 ls --profile prod2-account</span>
+</code></pre></div>
+<ol>
+<li>Then, configure profile for <code>ProdEnv2</code> AWS account.</li>
+</ol>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>configure<span class="w"> </span>sso<span class="w"> </span>--profile<span class="w"> </span>prod2-account
+</code></pre></div>
+<ol>
+<li>Then, configure profile for <code>monitoringEnv</code> AWS account.</li>
+</ol>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>configure<span class="w"> </span>sso<span class="w"> </span>--profile<span class="w"> </span>monitoring-account
+</code></pre></div>
+<ol>
+<li>Login to required SSO profile using <code>aws sso login --profile &lt;profile name&gt;</code>. Let's now log in to <code>pipelineEnv</code> account. When SSO login expires, you can use this command to re-login.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">AWS_PROFILE</span><span class="o">=</span><span class="s1">&#39;pipeline-account&#39;</span>
+aws<span class="w"> </span>sso<span class="w"> </span>login<span class="w"> </span>--profile<span class="w"> </span><span class="nv">$AWS_PROFILE</span>
+</code></pre></div>
+<ol>
+<li>Export required environment variables for further use. If not available already, you will be prompted for name of Amazon Grafana workspace in <code>monitoringEnv</code> region of <code>monitoringEnv</code> account. And, then its endpoint URL, ID, Role ARN will be captured as environment variables.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span><span class="sb">`</span>git<span class="w"> </span>rev-parse<span class="w"> </span>--show-toplevel<span class="sb">`</span>/helpers/multi-acc-new-eks-mixed-observability-pattern/source-envs.sh
+</code></pre></div>
+<ol>
+<li>Create SSM SecureString Parameter <code>/cdk-accelerator/cdk-context</code> in <code>pipelineEnv</code> region of <code>pipelineEnv</code> account. This parameter contains account ID and region of all four AWS accounts used in this Observability Accelerator pattern.</li>
+</ol>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>ssm<span class="w"> </span>put-parameter<span class="w"> </span>--profile<span class="w"> </span>pipeline-account<span class="w"> </span>--region<span class="w"> </span><span class="si">${</span><span class="nv">COA_PIPELINE_REGION</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--type<span class="w"> </span><span class="s2">&quot;SecureString&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--overwrite<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span><span class="s2">&quot;/cdk-accelerator/cdk-context&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--description<span class="w"> </span><span class="s2">&quot;AWS account details of different environments used by Multi-Account Multi-Region Mixed Observability (M3) Accelerator pattern&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--value<span class="w"> </span><span class="s1">&#39;{</span>
+<span class="s1">        &quot;context&quot;: {</span>
+<span class="s1">            &quot;pipelineEnv&quot;: {</span>
+<span class="s1">                &quot;account&quot;: &quot;&#39;</span><span class="nv">$COA_PIPELINE_ACCOUNT_ID</span><span class="s1">&#39;&quot;,</span>
+<span class="s1">                &quot;region&quot;: &quot;&#39;</span><span class="nv">$COA_PIPELINE_REGION</span><span class="s1">&#39;&quot;</span>
+
+<span class="s1">            },</span>
+<span class="s1">            &quot;prodEnv1&quot;: {</span>
+<span class="s1">                &quot;account&quot;: &quot;&#39;</span><span class="nv">$COA_PROD1_ACCOUNT_ID</span><span class="s1">&#39;&quot;,</span>
+<span class="s1">                &quot;region&quot;: &quot;&#39;</span><span class="nv">$COA_PROD1_REGION</span><span class="s1">&#39;&quot;</span>
+<span class="s1">            },</span>
+<span class="s1">            &quot;prodEnv2&quot;: {</span>
+<span class="s1">                &quot;account&quot;: &quot;&#39;</span><span class="nv">$COA_PROD2_ACCOUNT_ID</span><span class="s1">&#39;&quot;,</span>
+<span class="s1">                &quot;region&quot;: &quot;&#39;</span><span class="nv">$COA_PROD2_REGION</span><span class="s1">&#39;&quot;</span>
+<span class="s1">            },</span>
+<span class="s1">            &quot;monitoringEnv&quot;: {</span>
+<span class="s1">                &quot;account&quot;: &quot;&#39;</span><span class="nv">$COA_MON_ACCOUNT_ID</span><span class="s1">&#39;&quot;,</span>
+<span class="s1">                &quot;region&quot;: &quot;&#39;</span><span class="nv">$COA_MON_REGION</span><span class="s1">&#39;&quot;</span>
+<span class="s1">            }</span>
+<span class="s1">        }</span>
+<span class="s1">    }&#39;</span>
+</code></pre></div>
+<h3 id="amazon-grafana-configuration">Amazon Grafana Configuration<a class="headerlink" href="#amazon-grafana-configuration" title="Permanent link">¤</a></h3>
+<ol>
+<li>
+<p>Run <code>helpers/multi-acc-new-eks-mixed-observability-pattern/amg-preconfig.sh</code> script to</p>
+</li>
+<li>
+<p>create SSM SecureString parameter <code>/cdk-accelerator/amg-info</code> in <code>pipelineEnv</code> region of <code>pipelineEnv</code> account. This will be used by CDK for Grafana Operator resources configuration.</p>
+</li>
+<li>create Grafana workspace API key.</li>
+<li>create SSM SecureString parameter <code>/cdk-accelerator/grafana-api-key</code> in <code>monitoringEnv</code> region of <code>monitoringEnv</code> account. This will be used by <a href="https://github.com/external-secrets/external-secrets/tree/main/deploy/charts/external-secrets">External Secrets Operator</a>.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="nb">eval</span><span class="w"> </span>bash<span class="w"> </span><span class="sb">`</span>git<span class="w"> </span>rev-parse<span class="w"> </span>--show-toplevel<span class="sb">`</span>/helpers/multi-acc-new-eks-mixed-observability-pattern/amg-preconfig.sh
+</code></pre></div>
+<h3 id="github-sources-configuration">GitHub Sources Configuration<a class="headerlink" href="#github-sources-configuration" title="Permanent link">¤</a></h3>
+<ol>
+<li>
+<p>Following GitHub sources used in this pattern:</p>
+</li>
+<li>
+<p>Apps Git Repo - This repository serves as the source for deploying and managing applications in <code>prodEnv1</code> and <code>prodEnv2</code> using GitOps by Argo CD. Here, it is configured to <a href="https://github.com/aws-observability/aws-observability-accelerator/tree/main/artifacts/argocd-apps/sample-apps/envs/prod">sample-apps from aws-observability-accelerator</a>.</p>
+</li>
+<li>Source for CodePipeline - This repository serves as the CodePipeline source stage for retrieving and providing source code to downstream pipeline stages, facilitating automated CI/CD processes. Whenever a change is detected in the source code, the pipeline is initiated automatically. This is achieved using GitHub webhooks. We are using CodePipeline to deploy multi-account multi-region clusters.</li>
+<li>Source for <code>monitoringEnv</code> Argo CD - This repository serves as the source for deploying and managing applications in the <code>monitoringEnv</code> environment using GitOps by Argo CD. Here, it is configured to <a href="https://github.com/aws-observability/aws-observability-accelerator/tree/main/artifacts/argocd-apps/grafana-operator-app">grafana-operator-app from aws-observability-accelerator</a>, using which Grafana Datasoures and Dashboards are deployed.</li>
+</ol>
+<hr />
+<blockquote>
+<p><strong><em>NOTE</em></strong>: Argo CD source repositories used here for <code>prodEnv1</code>, <code>prodEnv2</code> and <code>monitoringEnv</code> are public. If you need to use private repositories, create secret called <code>github-ssh-key</code> in respective accounts and region. This secret should contain your GitHub SSH private key as a JSON structure with fields <code>sshPrivateKey</code> and <code>url</code> in AWS Secrets Manager. Argo CD add-on will use this secret for authentication with private GitHub repositories. For more details on setting up SSH credentials, please refer to <a href="https://aws-quickstart.github.io/cdk-eks-blueprints/addons/argo-cd/#secrets-support">Argo CD Secrets Support</a>.</p>
+</blockquote>
+<hr />
+<ol>
+<li>Fork <a href="https://github.com/aws-observability/cdk-aws-observability-accelerator"><code>cdk-aws-observability-accelerator</code></a> repository to your GitHub account.</li>
+<li>
+<p>Create GitHub Personal Access Token (PAT) for your CodePipeline GitHub source. For more information on how to set it up, please refer <a href="https://docs.github.com/en/enterprise-server@3.6/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token">here</a>. The GitHub Personal Access Token should have these scopes:</p>
+</li>
+<li>
+<p><strong>repo</strong> - to read the repository</p>
+</li>
+<li>
+<p><strong>admin:repo_hook</strong> - to use webhooks</p>
+</li>
+<li>
+<p>Run <code>helpers/multi-acc-new-eks-mixed-observability-pattern/gitsource-preconfig.sh</code> script to</p>
+</li>
+<li>
+<p>create SSM SecureString Parameter <code>/cdk-accelerator/pipeline-git-info</code> in <code>pipelineEnv</code> region of <code>pipelineEnv</code> account which contains details of CodePipeline source. This parameter contains GitHub owner name where you forked <a href="https://github.com/aws-observability/cdk-aws-observability-accelerator"><code>cdk-aws-observability-accelerator</code></a>, repository name (<code>cdk-aws-observability-accelerator</code>) and branch (<code>main</code>).</p>
+</li>
+<li>create AWS Secret Manager secret <code>github-token</code> in <code>pipelineEnv</code> region of <code>pipelineEnv</code> account to hold GitHub Personal Access Token (PAT).</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="nb">eval</span><span class="w"> </span>bash<span class="w"> </span><span class="sb">`</span>git<span class="w"> </span>rev-parse<span class="w"> </span>--show-toplevel<span class="sb">`</span>/helpers/multi-acc-new-eks-mixed-observability-pattern/gitsource-preconfig.sh
+</code></pre></div>
+<h2 id="deployment">Deployment<a class="headerlink" href="#deployment" title="Permanent link">¤</a></h2>
+<ol>
+<li>Fork <a href="https://github.com/aws-observability/cdk-aws-observability-accelerator"><code>cdk-aws-observability-accelerator</code></a> repository to your CodePioeline source GitHub organization/user.</li>
+<li>Install the AWS CDK Toolkit globally on host machine.</li>
+</ol>
+<div class="highlight"><pre><span></span><code>npm<span class="w"> </span>install<span class="w"> </span>-g<span class="w"> </span>aws-cdk
+</code></pre></div>
+<ol>
+<li>Install project dependencies.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span><span class="sb">`</span>git<span class="w"> </span>rev-parse<span class="w"> </span>--show-toplevel<span class="sb">`</span>
+npm<span class="w"> </span>i
+make<span class="w"> </span>build
+</code></pre></div>
+<ol>
+<li>Bootstrap all 4 AWS accounts using step mentioned for <strong>different environment for deploying CDK applications</strong> in <a href="https://aws-quickstart.github.io/cdk-eks-blueprints/pipelines/#deploying-pipelines">Deploying Pipelines</a>. If you have bootstrapped earlier, please remove them before proceeding with this step. Remember to set <code>pipelineEnv</code> account number in <code>--trust</code> flag. You can also refer to commands mentioned below:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="c1"># bootstrap pipelineEnv account WITHOUT explicit trust</span>
+env<span class="w"> </span><span class="nv">CDK_NEW_BOOTSTRAP</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>npx<span class="w"> </span>cdk<span class="w"> </span>bootstrap<span class="w"> </span>--profile<span class="w"> </span>pipeline-account<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--cloudformation-execution-policies<span class="w"> </span>arn:aws:iam::aws:policy/AdministratorAccess<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>aws://<span class="si">${</span><span class="nv">COA_PIPELINE_ACCOUNT_ID</span><span class="si">}</span>/<span class="si">${</span><span class="nv">COA_PIPELINE_REGION</span><span class="si">}</span>
+
+<span class="c1"># bootstrap prodEnv1 account with trust access from pipelineEnv account</span>
+env<span class="w"> </span><span class="nv">CDK_NEW_BOOTSTRAP</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>npx<span class="w"> </span>cdk<span class="w"> </span>bootstrap<span class="w"> </span>--profile<span class="w"> </span>prod1-account<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--cloudformation-execution-policies<span class="w"> </span>arn:aws:iam::aws:policy/AdministratorAccess<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--trust<span class="w"> </span><span class="si">${</span><span class="nv">COA_PIPELINE_ACCOUNT_ID</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>aws://<span class="si">${</span><span class="nv">COA_PROD1_ACCOUNT_ID</span><span class="si">}</span>/<span class="si">${</span><span class="nv">COA_PROD1_REGION</span><span class="si">}</span>
+
+<span class="c1"># bootstrap prodEnv2 account with trust access from pipelineEnv account</span>
+env<span class="w"> </span><span class="nv">CDK_NEW_BOOTSTRAP</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>npx<span class="w"> </span>cdk<span class="w"> </span>bootstrap<span class="w"> </span>--profile<span class="w"> </span>prod2-account<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--cloudformation-execution-policies<span class="w"> </span>arn:aws:iam::aws:policy/AdministratorAccess<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--trust<span class="w"> </span><span class="si">${</span><span class="nv">COA_PIPELINE_ACCOUNT_ID</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>aws://<span class="si">${</span><span class="nv">COA_PROD2_ACCOUNT_ID</span><span class="si">}</span>/<span class="si">${</span><span class="nv">COA_PROD2_REGION</span><span class="si">}</span>
+
+<span class="c1"># bootstrap monitoringEnv account with trust access from pipelineEnv account</span>
+env<span class="w"> </span><span class="nv">CDK_NEW_BOOTSTRAP</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>npx<span class="w"> </span>cdk<span class="w"> </span>bootstrap<span class="w"> </span>--profile<span class="w"> </span>monitoring-account<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--cloudformation-execution-policies<span class="w"> </span>arn:aws:iam::aws:policy/AdministratorAccess<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--trust<span class="w"> </span><span class="si">${</span><span class="nv">COA_PIPELINE_ACCOUNT_ID</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>aws://<span class="si">${</span><span class="nv">COA_MON_ACCOUNT_ID</span><span class="si">}</span>/<span class="si">${</span><span class="nv">COA_MON_REGION</span><span class="si">}</span>
+</code></pre></div>
+<ol>
+<li>Once all pre-requisites are set, you are ready to deploy the pipeline. Run the following command from the root of cloned repository to deploy the pipeline stack in <code>pipelineEnv</code> account. This step may require approximately <strong>20 minutes</strong> to finish.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">AWS_PROFILE</span><span class="o">=</span><span class="s1">&#39;pipeline-account&#39;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">AWS_REGION</span><span class="o">=</span><span class="si">${</span><span class="nv">COA_PIPELINE_REGION</span><span class="si">}</span>
+<span class="nb">cd</span><span class="w"> </span><span class="sb">`</span>git<span class="w"> </span>rev-parse<span class="w"> </span>--show-toplevel<span class="sb">`</span>
+
+make<span class="w"> </span>pattern<span class="w"> </span>multi-acc-new-eks-mixed-observability<span class="w"> </span>deploy<span class="w"> </span>multi-account-COA-pipeline
+</code></pre></div>
+<ol>
+<li>
+<p>Check status of pipeline that deploys multiple Amazon EKS clusters through CloudFromation stacks in respective accounts. This deployment also creates</p>
+</li>
+<li>
+<p><code>ampPrometheusDataSourceRole</code> with permissions to retrieve metrics from AMP in <code>ProdEnv1</code> account,</p>
+</li>
+<li><code>cloudwatchDataSourceRole</code> with permissions to retrieve metrics from CloudWatch in <code>ProdEnv2</code> account and</li>
+<li>Updates Amazon Grafana workspace IAM role in <code>monitoringEnv</code> account to assume roles in <code>ProdEnv1</code> and <code>ProdEnv2</code> accounts for retrieving and visualizing metrics in Grafana</li>
+</ol>
+<p>This step may require approximately <strong>50 minutes</strong> to finish. You may login to <code>pipelineEnv</code> account and navigate to <a href="https://console.aws.amazon.com/codesuite/codepipeline/pipelines">AWS CodePipeline console</a> at <code>pipelineEnv</code> region to check the status.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># script to check status of codepipeline</span>
+<span class="nv">dots</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">while</span><span class="w"> </span>true<span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nv">status</span><span class="o">=</span><span class="k">$(</span>aws<span class="w"> </span>codepipeline<span class="w"> </span>--profile<span class="w"> </span>pipeline-account<span class="w"> </span>list-pipeline-executions<span class="w"> </span>--pipeline-name<span class="w"> </span>multi-account-COA-pipeline<span class="w"> </span>--query<span class="w"> </span><span class="s1">&#39;pipelineExecutionSummaries[0].status&#39;</span><span class="w"> </span>--output<span class="w"> </span>text<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$status</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;Succeeded&quot;</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;Pipeline execution SUCCEEDED.&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">break</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$status</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;Failed&quot;</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;Pipeline execution FAILED.&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">break</span><span class="w"> </span><span class="o">||</span><span class="w">  </span><span class="nb">printf</span><span class="w"> </span><span class="s2">&quot;\r&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="s2">&quot;Pipeline execution status: </span><span class="nv">$status$dots</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nv">dots</span><span class="o">+=</span><span class="s2">&quot;.&quot;</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">10</span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
+</code></pre></div>
+<h2 id="post-deployment">Post Deployment<a class="headerlink" href="#post-deployment" title="Permanent link">¤</a></h2>
+<ol>
+<li>
+<p>Once all steps of <code>multi-acc-stages</code> in <code>multi-account-COA-pipeline</code> are complete, run script to</p>
+</li>
+<li>
+<p>create entries in kubeconfig with contexts of newly created EKS clusters.</p>
+</li>
+<li>export cluster specific and kubecontext environment variables (like: <code>COA_PROD1_CLUSTER_NAME</code> and <code>COA_PROD1_KUBE_CONTEXT</code>).</li>
+<li>get Amazon Prometheus Endpoint URL from <code>ProdEnv1</code> account and export to environment variable <code>COA_AMP_ENDPOINT_URL</code>.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span><span class="sb">`</span>git<span class="w"> </span>rev-parse<span class="w"> </span>--show-toplevel<span class="sb">`</span>/helpers/multi-acc-new-eks-mixed-observability-pattern/post-deployment-source-envs.sh
+</code></pre></div>
+<ol>
+<li>Then, update parameter <code>AMP_ENDPOINT_URL</code> of Argo CD bootstrap app in <code>monitoringEnv</code> with Amazon Prometheus endpoint URL from <code>ProdEnv1</code> account (<code>COA_AMP_ENDPOINT_URL</code>) and sync Argo CD apps.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="o">[[</span><span class="w"> </span><span class="sb">`</span>lsof<span class="w"> </span>-i:8080<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l<span class="sb">`</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]]</span>
+<span class="k">then</span>
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">ARGO_SERVER</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span>--context<span class="w"> </span><span class="si">${</span><span class="nv">COA_MON_KUBE_CONTEXT</span><span class="si">}</span><span class="w"> </span>-n<span class="w"> </span>argocd<span class="w"> </span>get<span class="w"> </span>svc<span class="w"> </span>-l<span class="w"> </span>app.kubernetes.io/name<span class="o">=</span>argocd-server<span class="w"> </span>-o<span class="w"> </span>name<span class="k">)</span>
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">ARGO_PASSWORD</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span>--context<span class="w"> </span><span class="si">${</span><span class="nv">COA_MON_KUBE_CONTEXT</span><span class="si">}</span><span class="w"> </span>-n<span class="w"> </span>argocd<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span>argocd-initial-admin-secret<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s2">&quot;{.data.password}&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>-d<span class="k">)</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;ARGO PASSWORD:: &quot;</span><span class="nv">$ARGO_PASSWORD</span>
+<span class="w">    </span>kubectl<span class="w"> </span>--context<span class="w"> </span><span class="si">${</span><span class="nv">COA_MON_KUBE_CONTEXT</span><span class="si">}</span><span class="w"> </span>port-forward<span class="w"> </span><span class="nv">$ARGO_SERVER</span><span class="w"> </span>-n<span class="w"> </span>argocd<span class="w"> </span><span class="m">8080</span>:443<span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">    </span><span class="nv">argocdPid</span><span class="o">=</span><span class="nv">$!</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span>pid:<span class="w"> </span><span class="nv">$argocdPid</span>
+<span class="w">    </span>sleep<span class="w"> </span>5s
+
+<span class="w">    </span>argocd<span class="w"> </span>--kube-context<span class="w"> </span><span class="si">${</span><span class="nv">COA_MON_KUBE_CONTEXT</span><span class="si">}</span><span class="w"> </span>login<span class="w"> </span>localhost:8080<span class="w"> </span>--insecure<span class="w"> </span>--username<span class="w"> </span>admin<span class="w"> </span>--password<span class="w"> </span><span class="nv">$ARGO_PASSWORD</span>
+
+<span class="w">    </span>argocd<span class="w"> </span>--kube-context<span class="w"> </span><span class="si">${</span><span class="nv">COA_MON_KUBE_CONTEXT</span><span class="si">}</span><span class="w"> </span>app<span class="w"> </span><span class="nb">set</span><span class="w"> </span>argocd/bootstrap-apps<span class="w"> </span>--helm-set<span class="w"> </span><span class="nv">AMP_ENDPOINT_URL</span><span class="o">=</span><span class="nv">$COA_AMP_ENDPOINT_URL</span>
+<span class="w">    </span>argocd<span class="w"> </span>--kube-context<span class="w"> </span><span class="si">${</span><span class="nv">COA_MON_KUBE_CONTEXT</span><span class="si">}</span><span class="w"> </span>app<span class="w"> </span>sync<span class="w"> </span>argocd/bootstrap-apps
+
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;\033[0;33m&#39;</span><span class="w"> </span><span class="s2">&quot;\nConfirm update here.. You should see AMP endpoint URL and no error message.&quot;</span><span class="w"> </span><span class="s1">&#39;\033[0m&#39;</span>
+<span class="w">    </span>kubectl<span class="w"> </span>--context<span class="w"> </span><span class="si">${</span><span class="nv">COA_MON_KUBE_CONTEXT</span><span class="si">}</span><span class="w"> </span>get<span class="w"> </span>-n<span class="w"> </span>grafana-operator<span class="w"> </span>grafanadatasources<span class="w"> </span>grafanadatasource-amp<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.spec.datasource.url}{&quot;\n&quot;}{.status}{&quot;\n&quot;}&#39;</span>
+
+<span class="w">    </span><span class="nb">kill</span><span class="w"> </span>-9<span class="w"> </span><span class="nv">$argocdPid</span>
+<span class="k">else</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Port 8080 is already in use by PID `lsof -i:8080 -t`. Please terminate it and rerun this step.&quot;</span>
+<span class="k">fi</span>
+</code></pre></div>
+<hr />
+<blockquote>
+<p><strong><em>NOTE</em></strong>: You can access Argo CD Admin UI using port-forwading. Here are commands to access <code>prodEnv1</code> Argo CD:</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">PROD1_ARGO_SERVER</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span>--context<span class="w"> </span><span class="si">${</span><span class="nv">COA_PROD1_KUBE_CONTEXT</span><span class="si">}</span><span class="w"> </span>-n<span class="w"> </span>argocd<span class="w"> </span>get<span class="w"> </span>svc<span class="w"> </span>-l<span class="w"> </span>app.kubernetes.io/name<span class="o">=</span>argocd-server<span class="w"> </span>-o<span class="w"> </span>name<span class="k">)</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">PROD1_ARGO_PASSWORD</span><span class="o">=</span><span class="k">$(</span>kubectl<span class="w"> </span>--context<span class="w"> </span><span class="si">${</span><span class="nv">COA_PROD1_KUBE_CONTEXT</span><span class="si">}</span><span class="w"> </span>-n<span class="w"> </span>argocd<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span>argocd-initial-admin-secret<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s2">&quot;{.data.password}&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>-d<span class="k">)</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;PROD1 ARGO PASSWORD:: &quot;</span><span class="nv">$PROD1_ARGO_PASSWORD</span>
+nohup<span class="w"> </span>kubectl<span class="w"> </span>--context<span class="w"> </span><span class="si">${</span><span class="nv">COA_PROD1_KUBE_CONTEXT</span><span class="si">}</span><span class="w"> </span>port-forward<span class="w"> </span><span class="nv">$PROD1_ARGO_SERVER</span><span class="w"> </span>-n<span class="w"> </span>argocd<span class="w"> </span><span class="m">8081</span>:443<span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span>
+sleep<span class="w"> </span><span class="m">5</span>
+curl<span class="w"> </span>localhost:8081
+</code></pre></div>
+<hr />
+<ol>
+<li>Datasource <code>grafana-operator-amp-datasource</code> created by Grafana Operator needs to reflect AMP Endpoint URL. There is a limitation with Grafana Operator (or Grafana) which doesn't sync updated <code>grafana-datasources</code> to Grafana. To overcome this issue, we will simply delete Datasource and Grafana Operator syncs up with the latest configuration in 5 minutes. This is achieved using Grafana API and key stored in SecureString parameter <code>/cdk-accelerator/grafana-api-key</code> in <code>monitoringEnv</code> account.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">COA_AMG_WORKSPACE_URL</span><span class="o">=</span><span class="k">$(</span>aws<span class="w"> </span>ssm<span class="w"> </span>get-parameter<span class="w"> </span>--profile<span class="w"> </span>pipeline-account<span class="w"> </span>--region<span class="w"> </span><span class="si">${</span><span class="nv">COA_PIPELINE_REGION</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span><span class="s2">&quot;/cdk-accelerator/amg-info&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--with-decryption<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--query<span class="w"> </span>Parameter.Value<span class="w"> </span>--output<span class="w"> </span>text<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;.[] | .workspaceURL&quot;</span><span class="k">)</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">COA_AMG_API_KEY</span><span class="o">=</span><span class="k">$(</span>aws<span class="w"> </span>ssm<span class="w"> </span>get-parameter<span class="w"> </span>--profile<span class="w"> </span>monitoring-account<span class="w"> </span>--region<span class="w"> </span><span class="si">${</span><span class="nv">COA_MON_REGION</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--name<span class="w"> </span><span class="s2">&quot;/cdk-accelerator/grafana-api-key&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--with-decryption<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--query<span class="w"> </span>Parameter.Value<span class="w"> </span>--output<span class="w"> </span>text<span class="k">)</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">COA_AMP_DS_ID</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>-s<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="si">${</span><span class="nv">COA_AMG_API_KEY</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="si">${</span><span class="nv">COA_AMG_WORKSPACE_URL</span><span class="si">}</span>/api/datasources<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;.[] |  select(.name==\&quot;grafana-operator-amp-datasource\&quot;) | .id&quot;</span><span class="k">)</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Datasource Name:: grafana-operator-amp-datasource&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Datasource ID:: &quot;</span><span class="nv">$COA_AMP_DS_ID</span>
+
+curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="si">${</span><span class="nv">COA_AMG_API_KEY</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="si">${</span><span class="nv">COA_AMG_WORKSPACE_URL</span><span class="si">}</span>/api/datasources/<span class="si">${</span><span class="nv">COA_AMP_DS_ID</span><span class="si">}</span>
+</code></pre></div>
+<ol>
+<li>Then, deploy ContainerInsights in <code>ProdEnv2</code> account.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="nv">prod2NGRole</span><span class="o">=</span><span class="k">$(</span>aws<span class="w"> </span>cloudformation<span class="w"> </span>describe-stack-resources<span class="w"> </span>--profile<span class="w"> </span>prod2-account<span class="w"> </span>--region<span class="w"> </span><span class="si">${</span><span class="nv">COA_PROD2_REGION</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--stack-name<span class="w"> </span><span class="s2">&quot;coa-eks-prod2-</span><span class="si">${</span><span class="nv">COA_PROD2_REGION</span><span class="si">}</span><span class="s2">-coa-eks-prod2-</span><span class="si">${</span><span class="nv">COA_PROD2_REGION</span><span class="si">}</span><span class="s2">-blueprint&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--query<span class="w"> </span><span class="s2">&quot;StackResources[?ResourceType==&#39;AWS::IAM::Role&#39; &amp;&amp; contains(LogicalResourceId,&#39;NodeGroupRole&#39;)].PhysicalResourceId&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output<span class="w"> </span>text<span class="k">)</span>
+
+aws<span class="w"> </span>iam<span class="w"> </span>attach-role-policy<span class="w"> </span>--profile<span class="w"> </span>prod2-account<span class="w"> </span>--region<span class="w"> </span><span class="si">${</span><span class="nv">COA_PROD2_REGION</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--role-name<span class="w"> </span><span class="si">${</span><span class="nv">prod2NGRole</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--policy-arn<span class="w"> </span>arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+
+aws<span class="w"> </span>iam<span class="w"> </span>list-attached-role-policies<span class="w"> </span>--profile<span class="w"> </span>prod2-account<span class="w"> </span>--region<span class="w"> </span><span class="si">${</span><span class="nv">COA_PROD2_REGION</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--role-name<span class="w"> </span><span class="nv">$prod2NGRole</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>CloudWatchAgentServerPolicy<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;Policy not found&#39;</span>
+
+<span class="nv">FluentBitHttpPort</span><span class="o">=</span><span class="s1">&#39;2020&#39;</span>
+<span class="nv">FluentBitReadFromHead</span><span class="o">=</span><span class="s1">&#39;Off&#39;</span>
+<span class="o">[[</span><span class="w"> </span><span class="si">${</span><span class="nv">FluentBitReadFromHead</span><span class="si">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;On&#39;</span><span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nv">FluentBitReadFromTail</span><span class="o">=</span><span class="s1">&#39;Off&#39;</span><span class="o">||</span><span class="w"> </span><span class="nv">FluentBitReadFromTail</span><span class="o">=</span><span class="s1">&#39;On&#39;</span>
+<span class="o">[[</span><span class="w"> </span>-z<span class="w"> </span><span class="si">${</span><span class="nv">FluentBitHttpPort</span><span class="si">}</span><span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nv">FluentBitHttpServer</span><span class="o">=</span><span class="s1">&#39;Off&#39;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nv">FluentBitHttpServer</span><span class="o">=</span><span class="s1">&#39;On&#39;</span>
+curl<span class="w"> </span>https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/latest/k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring/quickstart/cwagent-fluent-bit-quickstart.yaml<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">&#39;s/{{cluster_name}}/&#39;</span><span class="si">${</span><span class="nv">COA_PROD2_CLUSTER_NAME</span><span class="si">}</span><span class="s1">&#39;/;s/{{region_name}}/&#39;</span><span class="si">${</span><span class="nv">COA_PROD2_REGION</span><span class="si">}</span><span class="s1">&#39;/;s/{{http_server_toggle}}/&quot;&#39;</span><span class="si">${</span><span class="nv">FluentBitHttpServer</span><span class="si">}</span><span class="s1">&#39;&quot;/;s/{{http_server_port}}/&quot;&#39;</span><span class="si">${</span><span class="nv">FluentBitHttpPort</span><span class="si">}</span><span class="s1">&#39;&quot;/;s/{{read_from_head}}/&quot;&#39;</span><span class="si">${</span><span class="nv">FluentBitReadFromHead</span><span class="si">}</span><span class="s1">&#39;&quot;/;s/{{read_from_tail}}/&quot;&#39;</span><span class="si">${</span><span class="nv">FluentBitReadFromTail</span><span class="si">}</span><span class="s1">&#39;&quot;/&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>kubectl<span class="w"> </span>--context<span class="w"> </span><span class="si">${</span><span class="nv">COA_PROD2_KUBE_CONTEXT</span><span class="si">}</span><span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>-
+</code></pre></div>
+<h3 id="validating-grafana-dashboards">Validating Grafana Dashboards<a class="headerlink" href="#validating-grafana-dashboards" title="Permanent link">¤</a></h3>
+<ol>
+<li>Run the below command in <code>ProdEnv1</code> cluster to generate test traffic to sample application and let us visualize traces to X-Ray and Amazon Managed Grafana Console out the sample <code>ho11y</code> app :</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="nv">frontend_pod</span><span class="o">=</span><span class="sb">`</span>kubectl<span class="w"> </span>--context<span class="w"> </span><span class="si">${</span><span class="nv">COA_PROD1_KUBE_CONTEXT</span><span class="si">}</span><span class="w"> </span>get<span class="w"> </span>pod<span class="w"> </span>-n<span class="w"> </span>geordie<span class="w"> </span>--no-headers<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>frontend<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.items[*].metadata.name}&#39;</span><span class="sb">`</span>
+<span class="nv">loop_counter</span><span class="o">=</span><span class="m">0</span>
+<span class="k">while</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$loop_counter</span><span class="w"> </span>-le<span class="w"> </span><span class="m">5000</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span>
+<span class="k">do</span>
+<span class="w">        </span>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--context<span class="w"> </span><span class="si">${</span><span class="nv">COA_PROD1_KUBE_CONTEXT</span><span class="si">}</span><span class="w"> </span>-n<span class="w"> </span>geordie<span class="w"> </span>-it<span class="w"> </span><span class="nv">$frontend_pod</span><span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>downstream0.geordie.svc.cluster.local<span class="p">;</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="p">;</span>
+<span class="w">        </span><span class="nv">loop_counter</span><span class="o">=</span>$<span class="o">[</span><span class="nv">$loop_counter</span>+1<span class="o">]</span><span class="p">;</span>
+<span class="k">done</span>
+</code></pre></div>
+<ol>
+<li>Let it run for a few minutes and look in <strong>Amazon Grafana Dashboards &gt; Observability Accelerator Dashboards &gt; Kubernetes / Compute Resources / Namespace (Workloads)</strong></li>
+</ol>
+<p><img alt="AmazonManagedPrometheusDashboard" src="https://raw.githubusercontent.com/aws-observability/cdk-aws-observability-accelerator/main/docs/patterns/images/multi-acc-new-eks-mixed-observability-pattern-amg-amp1.png" /></p>
+<p>Please also have a look at other Dashboards created using Grafana Operator under folder <strong>Observability Accelerator Dashboards</strong>.</p>
+<ol>
+<li>Run the below command in <code>ProdEnv2</code> cluster to generate test traffic to sample application.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="nv">frontend_pod</span><span class="o">=</span><span class="sb">`</span>kubectl<span class="w"> </span>--context<span class="w"> </span><span class="si">${</span><span class="nv">COA_PROD2_KUBE_CONTEXT</span><span class="si">}</span><span class="w"> </span>get<span class="w"> </span>pod<span class="w"> </span>-n<span class="w"> </span>geordie<span class="w"> </span>--no-headers<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>frontend<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.items[*].metadata.name}&#39;</span><span class="sb">`</span>
+<span class="nv">loop_counter</span><span class="o">=</span><span class="m">0</span>
+<span class="k">while</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$loop_counter</span><span class="w"> </span>-le<span class="w"> </span><span class="m">5000</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span>
+<span class="k">do</span>
+<span class="w">        </span>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--context<span class="w"> </span><span class="si">${</span><span class="nv">COA_PROD2_KUBE_CONTEXT</span><span class="si">}</span><span class="w"> </span>-n<span class="w"> </span>geordie<span class="w"> </span>-it<span class="w"> </span><span class="nv">$frontend_pod</span><span class="w"> </span>--<span class="w"> </span>curl<span class="w"> </span>downstream0.geordie.svc.cluster.local<span class="p">;</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="p">;</span>
+<span class="w">        </span><span class="nv">loop_counter</span><span class="o">=</span>$<span class="o">[</span><span class="nv">$loop_counter</span>+1<span class="o">]</span><span class="p">;</span>
+<span class="k">done</span>
+</code></pre></div>
+<ol>
+<li>Let it run for a few minutes and look in <strong>Amazon Grafana Administration &gt; Datasources &gt; grafana-operator-cloudwatch-datasource &gt; Explore</strong>. Set values as highlighted in the snapshot and 'Run query'.</li>
+</ol>
+<p><img alt="AmazonManagedPrometheusDashboard" src="https://raw.githubusercontent.com/aws-observability/cdk-aws-observability-accelerator/main/docs/patterns/images/multi-acc-new-eks-mixed-observability-pattern-amg-cw1.png" /></p>
+<ol>
+<li>Then, let us look at X-Ray traces in <strong>Amazon Grafana Administration &gt; Datasources &gt; grafana-operator-xray-datasource &gt; Explore</strong>. Set <strong>Query Type = Service Map</strong> and 'Run query'.</li>
+</ol>
+<p><img alt="AmazonManagedPrometheusDashboard" src="https://raw.githubusercontent.com/aws-observability/cdk-aws-observability-accelerator/main/docs/patterns/images/multi-acc-new-eks-mixed-observability-pattern-amg-xray.png" /></p>
+<h3 id="clean-up">Clean up<a class="headerlink" href="#clean-up" title="Permanent link">¤</a></h3>
+<ol>
+<li>Run this command to destroy this pattern. This will delete pipeline.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">AWS_PROFILE</span><span class="o">=</span><span class="s1">&#39;pipeline-account&#39;</span>
+aws<span class="w"> </span>sso<span class="w"> </span>login<span class="w"> </span>--profile<span class="w"> </span><span class="nv">$AWS_PROFILE</span>
+<span class="nb">cd</span><span class="w"> </span><span class="sb">`</span>git<span class="w"> </span>rev-parse<span class="w"> </span>--show-toplevel<span class="sb">`</span>
+
+<span class="nb">source</span><span class="w"> </span><span class="sb">`</span>git<span class="w"> </span>rev-parse<span class="w"> </span>--show-toplevel<span class="sb">`</span>/helpers/multi-acc-new-eks-mixed-observability-pattern/source-envs.sh
+make<span class="w"> </span>pattern<span class="w"> </span>multi-acc-new-eks-mixed-observability<span class="w"> </span>destroy<span class="w"> </span>multi-account-COA-pipeline
+</code></pre></div>
+<ol>
+<li>Next, run this script to clean up resources created in respective accounts. This script deletes Argo CD apps, unsets kubeconfig entries, initiates deletion of CloudFormation stacks, secrets, SSM parameters and Amazon Grafana Workspace API key from respective accounts.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="nb">eval</span><span class="w"> </span>bash<span class="w"> </span><span class="sb">`</span>git<span class="w"> </span>rev-parse<span class="w"> </span>--show-toplevel<span class="sb">`</span>/helpers/multi-acc-new-eks-mixed-observability-pattern/clean-up.sh
+</code></pre></div>
+<ol>
+<li>In certain scenarios, CloudFormation stack deletion might encounter issues when attempting to delete a nodegroup IAM role. In such situations, it's recommended to first delete the relevant IAM role and then proceed with deleting the CloudFormation stack.</li>
+<li>Delete Dashboards and Data sources in Amazon Grafana.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["tabs"], "search": "../../../assets/javascripts/workers/search.07f07601.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.56dfad97.min.js"></script>
+      
+    
+  </body>
+</html>
